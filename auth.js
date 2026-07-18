@@ -143,7 +143,7 @@ function checkLogin() {
 
     if (sessionStorage.getItem("isLogin") !== "true") {
 
-        window.location.href = "login.html";
+        window.location.href = "index.html";
 
     }
 
@@ -159,7 +159,7 @@ function logout() {
 
         sessionStorage.removeItem("isLogin");
 
-        window.location.href = "login.html";
+        window.location.href = "index.html";
 
     }
 
