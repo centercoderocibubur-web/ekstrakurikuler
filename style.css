@@ -1,0 +1,1280 @@
+/* =====================================================
+   SISTEM INFORMASI EKSTRAKURIKULER CODERO CIBUBUR
+   STYLE.CSS (PART 1)
+===================================================== */
+
+/* ===============================
+   GOOGLE FONT
+================================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ===============================
+   ROOT COLOR
+================================*/
+
+:root{
+
+    --primary:#2563EB;
+    --primary-dark:#1D4ED8;
+
+    --success:#10B981;
+    --warning:#F59E0B;
+    --danger:#EF4444;
+
+    --sidebar:#0F172A;
+    --sidebar-hover:#1E293B;
+
+    --background:#F1F5F9;
+
+    --card:#FFFFFF;
+
+    --text:#1E293B;
+
+    --text-light:#64748B;
+
+    --border:#E2E8F0;
+
+    --shadow:0 8px 25px rgba(0,0,0,.08);
+
+}
+
+/* ===============================
+   RESET
+================================*/
+
+*{
+
+    margin:0;
+
+    padding:0;
+
+    box-sizing:border-box;
+
+}
+
+html{
+
+    scroll-behavior:smooth;
+
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+
+    background:var(--background);
+
+    color:var(--text);
+
+    overflow-x:hidden;
+
+}
+
+/* ===============================
+   SCROLLBAR
+================================*/
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#CBD5E1;
+
+    border-radius:10px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#94A3B8;
+
+}
+
+/* ===============================
+   LAYOUT
+================================*/
+
+.wrapper{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+/* ===============================
+   SIDEBAR
+================================*/
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    width:270px;
+
+    height:100vh;
+
+    background:var(--sidebar);
+
+    color:white;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:space-between;
+
+    box-shadow:5px 0 20px rgba(0,0,0,.12);
+
+    z-index:999;
+
+}
+
+/* ===============================
+   BRAND
+================================*/
+
+.brand{
+
+    text-align:center;
+
+    padding:30px 20px;
+
+    border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.brand img{
+
+    width:85px;
+
+    height:auto;
+
+    margin-bottom:15px;
+
+}
+
+.brand h4{
+
+    font-size:22px;
+
+    font-weight:700;
+
+    margin-bottom:5px;
+
+}
+
+.brand span{
+
+    color:#94A3B8;
+
+    font-size:14px;
+
+}
+
+/* ===============================
+   MENU
+================================*/
+
+.sidebar-menu{
+
+    list-style:none;
+
+    padding:20px 15px;
+    
+
+}
+
+.sidebar-menu li{
+
+    margin-bottom:10px;
+
+}
+
+.sidebar-menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:14px 18px;
+
+    text-decoration:none;
+
+    color:#CBD5E1;
+
+    border-radius:14px;
+
+    transition:.30s;
+
+    font-size:15px;
+
+    font-weight:500;
+
+}
+
+.sidebar-menu a i{
+
+    font-size:20px;
+
+}
+
+.sidebar-menu a:hover{
+
+    background:var(--sidebar-hover);
+
+    color:white;
+
+    transform:translateX(5px);
+
+}
+
+.sidebar-footer{
+
+    margin-top:auto;
+
+    padding:20px 15px;
+
+    border-top:1px solid rgba(255,255,255,.15);
+
+}
+
+.sidebar-footer a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:12px 15px;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    border-radius:10px;
+
+    transition:.3s;
+
+}
+
+.sidebar-footer a:hover{
+
+    background:rgba(255,255,255,.12);
+
+}
+/* Active Menu */
+
+.sidebar-menu li.active a{
+
+    background:var(--primary);
+
+    color:white;
+
+    box-shadow:0 5px 15px rgba(37,99,235,.35);
+
+}
+
+/* ===============================
+   LOGOUT
+================================*/
+
+.logout-btn{
+
+    margin:20px;
+
+    padding:14px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#DC2626;
+
+    color:white;
+
+    font-weight:600;
+
+    transition:.30s;
+
+}
+
+.logout-btn:hover{
+
+    background:#B91C1C;
+
+    transform:translateY(-2px);
+
+}
+
+
+/* ===============================
+   HEADER
+================================*/
+
+.topbar{
+
+    height:75px;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 35px;
+
+    box-shadow:var(--shadow);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+.left-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+.left-header h3{
+
+    font-size:24px;
+
+    font-weight:700;
+
+    margin:0;
+
+}
+
+.left-header small{
+
+    color:var(--text-light);
+
+}
+
+.right-header{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+/* ===============================
+   MENU BUTTON
+================================*/
+
+.menu-btn{
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    background:#EFF6FF;
+
+    border-radius:12px;
+
+    color:var(--primary);
+
+    font-size:22px;
+
+    transition:.30s;
+
+}
+
+.menu-btn:hover{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+/* ===============================
+   ICON BUTTON
+================================*/
+
+.icon-btn{
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    background:#F8FAFC;
+
+    border-radius:50%;
+
+    font-size:20px;
+
+    transition:.30s;
+
+}
+
+.icon-btn:hover{
+
+    background:var(--primary);
+
+    color:white;
+
+}
+
+/* ===============================
+   ADMIN BOX
+================================*/
+
+.admin-box{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+}
+
+.avatar{
+
+    width:48px;
+
+    height:48px;
+
+    border-radius:50%;
+
+    background:var(--primary);
+
+    color:white;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:22px;
+
+}
+
+.admin-box strong{
+
+    display:block;
+
+}
+
+.admin-box small{
+
+    color:var(--text-light);
+
+}
+
+/* ===============================
+   CONTENT
+================================*/
+
+.content{
+
+    padding:30px;
+
+}
+
+/* ===============================
+   RESPONSIVE
+================================*/
+
+@media(max-width:992px){
+
+    .sidebar{
+
+        left:-270px;
+
+        transition:.3s;
+
+    }
+
+    .sidebar.active{
+
+        left:0;
+
+    }
+
+    .main{
+
+        margin-left:0;
+
+        width:100%;
+
+    }
+
+    .topbar{
+
+        padding:0 20px;
+
+    }
+
+}
+
+@media(max-width:576px){
+
+    .left-header h3{
+
+        font-size:20px;
+
+    }
+
+    .admin-box div{
+
+        display:none;
+
+    }
+
+}
+
+/* =====================================================
+   STYLE.CSS (PART 2)
+   CARD - PANEL - TABLE - CHART - ANIMATION
+=====================================================*/
+
+
+/*=========================================
+  WELCOME BOX
+=========================================*/
+
+.welcome-box{
+
+    background:linear-gradient(135deg,#2563EB,#1D4ED8);
+
+    border-radius:20px;
+
+    padding:35px;
+
+    color:white;
+
+    box-shadow:0 15px 35px rgba(37,99,235,.25);
+
+    margin-bottom:30px;
+
+    overflow:hidden;
+
+    position:relative;
+
+}
+
+.welcome-box::after{
+
+    content:"";
+
+    position:absolute;
+
+    width:220px;
+
+    height:220px;
+
+    background:rgba(255,255,255,.08);
+
+    border-radius:50%;
+
+    top:-80px;
+
+    right:-70px;
+
+}
+
+.welcome-box h2{
+
+    font-weight:700;
+
+    margin-bottom:10px;
+
+}
+
+.welcome-box p{
+
+    margin:0;
+
+    opacity:.9;
+
+}
+
+
+
+/*=========================================
+  STATISTIC CARD
+=========================================*/
+
+.stat-card{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+
+    transition:.3s;
+
+    cursor:pointer;
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.12);
+
+}
+
+.stat-card span{
+
+    color:#64748B;
+
+    font-size:14px;
+
+}
+
+.stat-card h2{
+
+    margin-top:8px;
+
+    font-size:34px;
+
+    font-weight:700;
+
+}
+
+.stat-card i{
+
+    font-size:45px;
+
+    opacity:.2;
+
+}
+
+
+
+/*=========================================
+  CARD COLORS
+=========================================*/
+
+.blue{
+
+    border-left:6px solid #2563EB;
+
+}
+
+.blue i{
+
+    color:#2563EB;
+
+}
+
+.green{
+
+    border-left:6px solid #10B981;
+
+}
+
+.green i{
+
+    color:#10B981;
+
+}
+
+.orange{
+
+    border-left:6px solid #F59E0B;
+
+}
+
+.orange i{
+
+    color:#F59E0B;
+
+}
+
+.red{
+
+    border-left:6px solid #EF4444;
+
+}
+
+.red i{
+
+    color:#EF4444;
+
+}
+
+
+
+/*=========================================
+  PANEL
+=========================================*/
+
+.card-panel{
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:25px;
+
+    box-shadow:0 8px 25px rgba(0,0,0,.06);
+
+    margin-bottom:25px;
+
+    transition:.3s;
+
+}
+
+.card-panel:hover{
+
+    box-shadow:0 15px 35px rgba(0,0,0,.10);
+
+}
+
+.panel-title{
+
+    font-size:18px;
+
+    font-weight:700;
+
+    margin-bottom:20px;
+
+}
+
+
+
+/*=========================================
+  CHART
+=========================================*/
+
+#chartKategori{
+
+    width:100%;
+
+    height:320px;
+
+}
+
+
+
+/*=========================================
+  SCHEDULE
+=========================================*/
+
+.schedule{
+
+    list-style:none;
+
+    padding:0;
+
+    margin:0;
+
+}
+
+.schedule li{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:15px;
+
+    margin-bottom:12px;
+
+    border-radius:12px;
+
+    background:#F8FAFC;
+
+    transition:.3s;
+
+}
+
+.schedule li:hover{
+
+    background:#EFF6FF;
+
+}
+
+.schedule strong{
+
+    color:#2563EB;
+
+}
+
+
+
+/*=========================================
+  TABLE
+=========================================*/
+
+.table{
+
+    margin-bottom:0;
+
+}
+
+.table thead{
+
+    background:#F8FAFC;
+
+}
+
+.table thead th{
+
+    border:none;
+
+    color:#475569;
+
+    font-weight:600;
+
+}
+
+.table tbody td{
+
+    vertical-align:middle;
+
+    border-color:#EEF2F7;
+
+}
+
+.table-hover tbody tr{
+
+    transition:.2s;
+
+}
+
+.table-hover tbody tr:hover{
+
+    background:#EFF6FF;
+
+}
+
+
+
+/*=========================================
+  BADGE
+=========================================*/
+
+.badge-success{
+
+    background:#DCFCE7;
+
+    color:#166534;
+
+    padding:6px 12px;
+
+    border-radius:30px;
+
+}
+
+.badge-warning{
+
+    background:#FEF3C7;
+
+    color:#92400E;
+
+    padding:6px 12px;
+
+    border-radius:30px;
+
+}
+
+.badge-danger{
+
+    background:#FEE2E2;
+
+    color:#991B1B;
+
+    padding:6px 12px;
+
+    border-radius:30px;
+
+}
+
+
+
+/*=========================================
+  BUTTON
+=========================================*/
+
+.btn-primary{
+
+    background:#2563EB;
+
+    border:none;
+
+    border-radius:12px;
+
+    padding:10px 20px;
+
+    font-weight:600;
+
+}
+
+.btn-primary:hover{
+
+    background:#1D4ED8;
+
+}
+
+
+
+/*=========================================
+  ANIMATION
+=========================================*/
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(30px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.welcome-box{
+
+    animation:fadeUp .5s ease;
+
+}
+
+.stat-card{
+
+    animation:fadeUp .7s ease;
+
+}
+
+.card-panel{
+
+    animation:fadeUp .9s ease;
+
+}
+
+
+
+/*=========================================
+  RESPONSIVE TABLET
+=========================================*/
+
+@media(max-width:992px){
+
+    .welcome-box{
+
+        padding:25px;
+
+    }
+
+    .stat-card{
+
+        margin-bottom:15px;
+
+    }
+
+}
+
+
+
+/*=========================================
+  RESPONSIVE HP
+=========================================*/
+
+@media(max-width:576px){
+
+    .welcome-box{
+
+        text-align:center;
+
+    }
+
+    .stat-card{
+
+        flex-direction:column;
+
+        text-align:center;
+
+        gap:15px;
+
+    }
+
+    .stat-card i{
+
+        font-size:40px;
+
+    }
+
+    .panel-title{
+
+        text-align:center;
+
+    }
+
+}
+
+/* ===========================
+   SCHOOL CARD
+=========================== */
+
+.school-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:30px;
+
+    text-align:center;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+    height:100%;
+
+}
+
+.school-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 20px 35px rgba(0,0,0,.15);
+
+}
+
+.school-icon{
+
+    width:80px;
+
+    height:80px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    color:white;
+
+    font-size:35px;
+
+    margin-bottom:20px;
+
+}
+
+.school-card h2{
+
+    font-size:40px;
+
+    font-weight:700;
+
+    margin-top:15px;
+
+    color:#2563EB;
+
+}
+
+.school-card h4{
+    margin-top:10px;
+    font-weight:700;
+    font-size:15px;   /* ukuran tulisan */
+    line-height:1.3;
+}
+
+.school-card p{
+
+    color:#64748B;
+
+}
+
+/* ==========================
+   SIDEBAR COLLAPSE
+========================== */
+
+.sidebar{
+
+    transition:transform .35s ease;
+
+}
+
+.sidebar.hide{
+
+    transform:translateX(-100%);
+
+}
+
+.main{
+
+    margin-left:270px;
+
+    width:calc(100% - 270px);
+
+    transition:.35s;
+
+}
+
+.main.full{
+
+    margin-left:0;
+
+    width:100%;
+
+}
+
+/* ===========================
+   Progress Sekolah
+=========================== */
+
+.progress{
+
+    border-radius:20px;
+
+    background:#E2E8F0;
+
+    overflow:hidden;
+
+    height:14px;
+
+}
+
+.progress-bar{
+
+    border-radius:20px;
+
+    transition:width .7s ease;
+
+}
+
+#progressSekolah strong{
+
+    font-size:15px;
+
+}
+
+#progressSekolah span{
+
+    color:#64748B;
+
+    font-weight:600;
+
+}
+
+/* ==========================
+   INFORMASI JADWAL
+========================== */
+
+.schedule{
+
+    list-style:none;
+
+    padding:0;
+
+    margin:0;
+
+}
+
+.schedule li{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:14px 18px;
+
+    margin-bottom:12px;
+
+    background:#F8FAFC;
+
+    border-left:5px solid #2563EB;
+
+    border-radius:12px;
+
+    transition:.3s;
+
+}
+
+.schedule li:hover{
+
+    transform:translateX(5px);
+
+    background:#EFF6FF;
+
+}
+
+.schedule strong{
+
+    display:block;
+
+    font-size:15px;
+
+    color:#2563EB;
+
+}
+
+.schedule small{
+
+    color:#64748B;
+
+    font-size:13px;
+
+}
+
+.schedule span{
+
+    font-weight:600;
+
+    color:#1E293B;
+
+}

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Data Siswa | Codero Cibubur</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <img src="coderocibubur.jpg" alt="Logo">
+
+            <h4>CODERO</h4>
+
+            <span>Cibubur</span>
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+
+                <a href="dashboard.html">
+
+                    <i class="bi bi-grid-fill"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="pilih-sekolah.html">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    Data Siswa
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="absensi.html">
+
+                    <i class="bi bi-calendar-check-fill"></i>
+
+                    Absensi
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="laporan.html">
+
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>
+
+                    Laporan
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="#">
+
+                    <i class="bi bi-gear-fill"></i>
+
+                    Pengaturan
+
+                </a>
+
+            </li>
+
+        </ul>
+
+        <button class="logout-btn" onclick="logout()">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </button>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="left-header">
+
+                <h3>Data Siswa</h3>
+                
+            </div>
+<h5 id="namaSekolah" class="text-primary"></h5>
+            <div class="admin-box">
+
+                <div class="avatar">
+
+                    <i class="bi bi-person-fill"></i>
+
+                </div>
+
+                <div>
+
+                    <strong>Admin</strong>
+
+                    <small>Administrator</small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- CONTENT -->
+
+        <section class="content">
+
+            <!-- Atas -->
+
+            <div class="card-panel">
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+
+                    <div>
+
+                        <h4 class="mb-1">Data Siswa</h4>
+
+                        <small class="text-muted">
+
+                            Kelola seluruh data siswa ekstrakurikuler
+
+                        </small>
+
+                    </div>
+
+                    <div class="d-flex gap-2">
+
+    <!-- Tambah Siswa -->
+
+    <button
+        class="btn btn-primary"
+        onclick="modeTambah()"
+        data-bs-toggle="modal"
+        data-bs-target="#modalSiswa">
+
+        <i class="bi bi-plus-circle"></i>
+
+        Tambah Siswa
+
+    </button>
+
+    <!-- Tambah Banyak -->
+
+    <button
+        class="btn btn-success"
+        data-bs-toggle="modal"
+        data-bs-target="#modalBanyak">
+
+        <i class="bi bi-people-fill"></i>
+
+        Tambah Banyak
+
+    </button>
+
+</div>
+
+                </div>
+
+            </div>
+
+            <!-- Toolbar -->
+
+            <div class="card-panel">
+
+                <div class="row g-3">
+
+                    <div class="col-lg-4">
+
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="🔍 Cari Nama">
+
+                    </div>
+
+                    <div class="col-lg-3">
+
+                        <select class="form-select">
+
+                            <option>Semua Kelas</option>
+                            <option>Coding</option>
+                            <option>Robotik</option>
+                            <option>Roblox</option>
+                            <option>Digital Art</option>
+                            <option>AI</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="col-lg-5 text-end">
+
+                        <button class="btn btn-success">
+
+                            <i class="bi bi-file-earmark-excel"></i>
+
+                            Excel
+
+                        </button>
+
+                        <button class="btn btn-danger">
+
+                            <i class="bi bi-file-earmark-pdf"></i>
+
+                            PDF
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Table -->
+
+            <div class="card-panel">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                        <tr>
+
+                            <th width="60">No</th>
+
+                            <th>Nama</th>
+
+                            <th>Kelas</th>
+
+                            <th>Sekolah</th>
+
+                            <th>Kategori</th>
+
+                            <th>Status</th>
+
+                            <th width="150">Aksi</th>
+
+                        </tr>
+
+                        </thead>
+
+                        <tbody id="tbodySiswa"></tbody>
+
+                        
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/auth.js"></script>
+<script src="js/siswa.js"></script>
+<script>
+
+checkLogin();
+
+</script>
+
+<!-- ======================================
+     MODAL TAMBAH BANYAK SISWA
+====================================== -->
+
+<div class="modal fade" id="modalBanyak">
+
+    <div class="modal-dialog modal-xl">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+
+                    Tambah Banyak Siswa
+
+                </h5>
+
+                <button
+                    class="btn-close"
+                    data-bs-dismiss="modal">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="alert alert-primary">
+
+                    <i class="bi bi-building"></i>
+
+                    Sekolah :
+
+                    <strong id="namaSekolahBulk"></strong>
+
+                </div>
+
+                <div class="table-responsive">
+
+<table class="table table-bordered align-middle">
+
+    <thead>
+
+        <tr>
+
+            <th width="60">No</th>
+
+            <th>Nama Siswa</th>
+
+            <th width="120">Kelas</th>
+
+            <th width="170">Kategori</th>
+
+            <th width="70">Aksi</th>
+
+        </tr>
+
+    </thead>
+
+    <tbody id="bulkBody">
+
+    </tbody>
+
+</table>
+
+</div>
+
+<div class="mt-3">
+
+    <button
+        class="btn btn-success"
+        onclick="tambahBaris()">
+
+        <i class="bi bi-plus-circle"></i>
+
+        Tambah Baris
+
+    </button>
+
+</div>
+
+            </div>
+
+            <div class="modal-footer">
+
+    <button
+        class="btn btn-secondary"
+        data-bs-dismiss="modal">
+
+        Batal
+
+    </button>
+
+    <button
+        class="btn btn-primary"
+        onclick="simpanSemua()">
+
+        <i class="bi bi-check-circle"></i>
+
+        Simpan Semua
+
+    </button>
+
+</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="modal fade" id="modalSiswa">
+
+<div class="modal-dialog modal-lg">
+
+<div class="modal-content">
+
+<div class="modal-header">
+
+<h5 id="judulModal">Tambah Siswa</h5>
+
+<button class="btn-close"
+data-bs-dismiss="modal"></button>
+</div>
+
+<div class="modal-body">
+
+<div class="row g-3">
+
+<div class="col-md-6">
+
+<label>Nama</label>
+
+<input
+id="nama"
+class="form-control">
+
+</div>
+
+
+<div class="col-md-6">
+
+    <label>Kelas</label>
+
+    <select id="kelas" class="form-select">
+
+        <option value="">-- Pilih Kelas --</option>
+
+        <option>1</option>
+        <option>2</option>
+        <option>3</option>
+        <option>4</option>
+        <option>5</option>
+        <option>6</option>
+
+        <option>7</option>
+        <option>8</option>
+        <option>9</option>
+
+        <option>10</option>
+        <option>11</option>
+        <option>12</option>
+
+    </select>
+
+</div>
+
+<div class="col-md-6">
+
+    <label>Sekolah</label>
+
+    <select id="sekolah" class="form-select">
+
+        <option value="">-- Pilih Sekolah --</option>
+
+        <option>SD AL JANNAH</option>
+
+        <option>SMP AL JANNAH</option>
+
+        <option>SD SEKOLAH ALAM CIKEAS</option>
+
+        <option>SMP SEKOLAH ALAM CIKEAS</option>
+
+        <option>SMA SEKOLAH ALAM CIKEAS</option>
+
+    </select>
+
+</div>
+
+<div class="col-md-6">
+
+<label>Kategori</label>
+
+<select
+id="kategori"
+class="form-select">
+
+<option>Coding</option>
+
+<option>Robotik</option>
+
+<option>Roblox</option>
+
+<option>Digital Art</option>
+
+<option>AI</option>
+
+</select>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="modal-footer">
+
+<button
+class="btn btn-secondary"
+data-bs-dismiss="modal">
+
+Batal
+
+</button>
+
+<button
+class="btn btn-primary"
+onclick="tambahSiswa()">
+
+Simpan
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

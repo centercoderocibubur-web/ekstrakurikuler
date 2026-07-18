@@ -1,0 +1,161 @@
+/* ==================================================
+   CODERO CIBUBUR
+   LAYOUT.CSS
+================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+:root{
+
+    --primary:#2563EB;
+    --sidebar:#0F172A;
+    --background:#F1F5F9;
+    --card:#FFFFFF;
+    --text:#1E293B;
+    --shadow:0 10px 30px rgba(0,0,0,.08);
+
+    --sidebar-width:270px;
+
+}
+
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+body{
+
+    font-family:'Poppins',sans-serif;
+    background:var(--background);
+    color:var(--text);
+    overflow-x:hidden;
+
+}
+
+.wrapper{
+
+    display:flex;
+    min-height:100vh;
+
+}
+
+.sidebar{
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    width:var(--sidebar-width);
+
+    height:100vh;
+
+    background:var(--sidebar);
+
+    color:white;
+
+    z-index:1000;
+
+    display:flex;
+
+    flex-direction:column;
+
+    transition:.35s;
+
+}
+
+/* Sidebar tertutup */
+
+.sidebar.close{
+
+    transform:translateX(-100%);
+
+}
+
+.overlay{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.35);
+
+    opacity:0;
+
+    visibility:hidden;
+
+    transition:.3s;
+
+    z-index:900;
+
+}
+
+.overlay.show{
+
+    opacity:1;
+
+    visibility:visible;
+
+}
+
+.main{
+
+    flex:1;
+
+    margin-left:0;
+
+    min-height:100vh;
+
+}
+
+.topbar{
+
+    height:70px;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 30px;
+
+    box-shadow:var(--shadow);
+
+    position:sticky;
+
+    top:0;
+
+    z-index:100;
+
+}
+
+.menu-btn{
+
+    width:45px;
+
+    height:45px;
+
+    border:none;
+
+    background:#EEF4FF;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:24px;
+
+}
+
+.content{
+
+    padding:30px;
+
+}
+
