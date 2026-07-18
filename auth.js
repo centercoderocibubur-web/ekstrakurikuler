@@ -143,7 +143,7 @@ function checkLogin() {
 
     if (sessionStorage.getItem("isLogin") !== "true") {
 
-        window.location.href = "dashboard.html";
+        window.location.href = "index.html";
 
     }
 
