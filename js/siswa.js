@@ -361,3 +361,32 @@ function simpanSemua(){
     ).hide();
 
 }
+
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
+async function tesFirebase() {
+
+    try {
+
+        const doc = await addDoc(
+            collection(db, "tes"),
+            {
+                nama: "Codero",
+                waktu: new Date().toISOString()
+            }
+        );
+
+        console.log("Berhasil", doc.id);
+
+    } catch (e) {
+
+        console.error(e);
+
+    }
+
+}
+
+tesFirebase();
