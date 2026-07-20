@@ -1,4 +1,7 @@
 import { db } from "./firebase.js";
+
+console.log("Firebase berhasil terhubung");
+console.log(db);
 let editIndex = -1;
 let dataSiswa = JSON.parse(localStorage.getItem("siswa")) || [];
 
