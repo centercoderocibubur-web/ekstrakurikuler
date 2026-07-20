@@ -1,3 +1,4 @@
+import { db } from "./firebase.js";
 let editIndex = -1;
 let dataSiswa = JSON.parse(localStorage.getItem("siswa")) || [];
 
