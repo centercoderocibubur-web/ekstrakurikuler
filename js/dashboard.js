@@ -1,22 +1,17 @@
-// ===============================
-// DASHBOARD CODERO CIBUBUR
-// ===============================
+/*=========================================
+  DASHBOARD.JS
+  CODERO CIBUBUR
+=========================================*/
 
-// Ambil data siswa dari localStorage
-const dataSiswa = JSON.parse(localStorage.getItem("siswa")) || [];
+import { db } from "./firebase.js";
 
-// ===============================
-// TOTAL SISWA
-// ===============================
-
-const totalSiswa = document.getElementById("totalSiswa");
-
-if (totalSiswa) {
-    totalSiswa.textContent = dataSiswa.length;
-}
+import {
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // ===============================
-// JUMLAH SISWA PER SEKOLAH
+// DAFTAR SEKOLAH
 // ===============================
 
 const sekolahList = [
@@ -27,28 +22,99 @@ const sekolahList = [
     "SMA SEKOLAH ALAM CIKEAS"
 ];
 
-const progress = document.getElementById("progressSekolah");
+// ===============================
+// LOAD DASHBOARD
+// ===============================
 
-if(progress){
+document.addEventListener("DOMContentLoaded", loadDashboard);
+
+async function loadDashboard(){
+
+    try{
+
+        const snapshot = await getDocs(
+            collection(db,"siswa")
+        );
+
+        const dataSiswa = [];
+
+        snapshot.forEach(doc=>{
+
+            dataSiswa.push(doc.data());
+
+        });
+
+        tampilkanTotalSiswa(dataSiswa);
+
+        tampilkanProgressSekolah(dataSiswa);
+
+        tampilkanTotalSekolah();
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        alert("Gagal mengambil data dashboard.");
+
+    }
+
+}
+
+// ===============================
+// TOTAL SISWA
+// ===============================
+
+function tampilkanTotalSiswa(dataSiswa){
+
+    const total = document.getElementById("totalSiswa");
+
+    if(total){
+
+        total.textContent = dataSiswa.length;
+
+    }
+
+}
+
+// ===============================
+// PROGRESS SEKOLAH
+// ===============================
+
+function tampilkanProgressSekolah(dataSiswa){
+
+    const progress =
+        document.getElementById("progressSekolah");
+
+    if(!progress) return;
 
     progress.innerHTML = "";
 
-    // Cari jumlah siswa terbanyak
     let terbesar = 1;
 
     sekolahList.forEach(sekolah=>{
 
-        const jumlah = dataSiswa.filter(item=>item.sekolah===sekolah).length;
+        const jumlah = dataSiswa.filter(
+
+            siswa => siswa.sekolah === sekolah
+
+        ).length;
 
         if(jumlah > terbesar){
+
             terbesar = jumlah;
+
         }
 
     });
 
     sekolahList.forEach(sekolah=>{
 
-        const jumlah = dataSiswa.filter(item=>item.sekolah===sekolah).length;
+        const jumlah = dataSiswa.filter(
+
+            siswa => siswa.sekolah === sekolah
+
+        ).length;
 
         const persen = (jumlah / terbesar) * 100;
 
@@ -68,7 +134,7 @@ if(progress){
 
                 <div
                     class="progress-bar bg-primary"
-                    style="width:${persen}%;">
+                    style="width:${persen}%">
                 </div>
 
             </div>
@@ -82,22 +148,18 @@ if(progress){
 }
 
 // ===============================
-// SISWA AKTIF
-// ===============================
-
-const aktif = document.getElementById("aktif");
-
-if (aktif) {
-    aktif.textContent = dataSiswa.length;
-}
-
-// ===============================
 // TOTAL SEKOLAH
 // ===============================
 
+function tampilkanTotalSekolah(){
 
-const totalSekolah = document.getElementById("totalSekolah");
+    const total =
+        document.getElementById("totalSekolah");
 
-if (totalSekolah) {
-    totalSekolah.textContent = sekolahList.length;
+    if(total){
+
+        total.textContent = sekolahList.length;
+
+    }
+
 }
