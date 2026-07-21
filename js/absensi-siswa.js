@@ -1,13 +1,13 @@
-import { checkLogin } from "./auth.js";
-
-checkLogin();
-
-
 import { db } from "./firebase.js";
 
 import {
     collection,
-    getDocs
+    getDocs,
+    addDoc,
+    updateDoc,
+    doc,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // ==========================================
@@ -123,17 +123,29 @@ let dataTampil = [];
 // LOAD ABSENSI
 // ==========================================
 
-function loadAbsensi(){
+async function loadAbsensi(){
 
-    // Reset status
     statusMap = {};
 
-    // Semua siswa default Hadir
-    siswaSekolah.forEach(function(item){
+    const q = query(
+        collection(db,"absensi"),
+        where("sekolah","==",sekolah),
+        where("tanggal","==",tanggalPertemuan)
+    );
 
-        statusMap[item.nama] = "Hadir";
+    const snapshot = await getDocs(q);
+
+    if(snapshot.empty) return;
+
+    const data = snapshot.docs[0].data();
+
+    data.siswa.forEach(function(item){
+
+        statusMap[item.nama] = item.status;
 
     });
+
+}
 
     // Cari data absensi yang sudah pernah disimpan
     const absensi =
@@ -445,7 +457,7 @@ function refreshData(){
         document.getElementById("jumlahSiswa").textContent =
             siswaSekolah.length;
 
-        loadAbsensi();
+        await loadAbsensi();
 
         renderSiswa(dataTampil);
 
@@ -460,7 +472,7 @@ function refreshData(){
 // SIMPAN ABSENSI
 // ==========================================
 
-function simpanAbsensi(){
+async function simpanAbsensi(){
 
     const daftarSiswa = siswaSekolah.map(function(item){
 
@@ -489,29 +501,32 @@ function simpanAbsensi(){
         dibuat: new Date().toISOString()
 
     };
+    const q = query(
+    collection(db,"absensi"),
+    where("sekolah","==",sekolah),
+    where("tanggal","==",tanggalPertemuan)
+);
 
-    const index = dbAbsensi.findIndex(function(item){
+const snapshot = await getDocs(q);
 
-        return item.sekolah === sekolah &&
-               item.tanggal === tanggalPertemuan;
+if(snapshot.empty){
 
-    });
-
-    if(index >= 0){
-
-        dbAbsensi[index] = dataBaru;
-
-    }else{
-
-        dbAbsensi.push(dataBaru);
-
-    }
-
-    localStorage.setItem(
-        "absensi",
-        JSON.stringify(dbAbsensi)
+    await addDoc(
+        collection(db,"absensi"),
+        dataBaru
     );
 
+}else{
+
+    await updateDoc(
+
+        doc(db,"absensi",snapshot.docs[0].id),
+
+        dataBaru
+
+    );
+
+}
     alert("Absensi berhasil disimpan.");
 
     window.location.href = "pertemuan.html";
