@@ -383,4 +383,12 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+window.tambahSiswa = tambahSiswa;
+window.modeTambah = modeTambah;
+window.editSiswa = editSiswa;
+window.hapus = hapus;
+window.tambahBaris = tambahBaris;
+window.hapusBaris = hapusBaris;
+window.simpanSemua = simpanSemua;
+window.tampilkan = tampilkan;
 
