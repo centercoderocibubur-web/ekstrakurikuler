@@ -43,29 +43,32 @@ async function loadSiswa(){
     siswaSekolah = [];
 
     const snapshot = await getDocs(
-        collection(db,"siswa")
+        collection(db, "siswa")
     );
 
-    snapshot.forEach(doc=>{
+    console.log("Total dokumen siswa:", snapshot.size);
+
+    snapshot.forEach(doc => {
 
         const data = doc.data();
+
+        console.log(data);
 
         if(data.sekolah === sekolah){
 
             siswaSekolah.push({
-
                 id: doc.id,
-
                 ...data
-
             });
 
         }
 
     });
 
-}
+    console.log("Sekolah aktif:", sekolah);
+    console.log("Siswa yang cocok:", siswaSekolah);
 
+}
 // ==========================================
 // ELEMENT HTML
 // ==========================================
