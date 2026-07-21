@@ -30,20 +30,15 @@ function tambahSiswa(){
     }
 
     // Simpan ke array
-    if(editIndex == -1){
+    if (editIndex == -1) {
 
-    dataSiswa.push(siswa);
+    await addDoc(
+        collection(db, "siswa"),
+        siswa
+    );
 
-    }else{
+}
 
-    dataSiswa[editIndex] = siswa;
-
-    editIndex = -1;
-
-    }
-
-    // Simpan ke localStorage
-    localStorage.setItem("siswa", JSON.stringify(dataSiswa));
 
     // Tutup modal
     bootstrap.Modal.getInstance(document.getElementById("modalSiswa")).hide();
@@ -151,8 +146,6 @@ function nomorUlang(){
 
 }
 function tampilkan(){
-
-    dataSiswa = JSON.parse(localStorage.getItem("siswa")) || [];
     
     const sekolahAktif = localStorage.getItem("sekolahAktif");
 
@@ -364,7 +357,8 @@ function simpanSemua(){
 
 import {
     collection,
-    addDoc
+    addDoc,
+    getDocs
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 async function tesFirebase() {
