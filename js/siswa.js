@@ -1,15 +1,14 @@
 import { db } from "./firebase.js";
 
-console.log("Firebase berhasil terhubung");
-console.log(db);
-let editIndex = -1;
-let dataSiswa = JSON.parse(localStorage.getItem("siswa")) || [];
+import {
+    collection,
+    addDoc,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 tampilkan();
 
-function tambahSiswa(){
-
-    const sekolahAktif = localStorage.getItem("sekolahAktif");
+async function tambahSiswa(){
 
     const siswa = {
 
@@ -20,7 +19,6 @@ function tambahSiswa(){
 
     };
 
-    // Validasi
     if(
         siswa.nama === "" ||
         siswa.kelas === ""
@@ -29,13 +27,32 @@ function tambahSiswa(){
         return;
     }
 
-    // Simpan ke array
-    if (editIndex == -1) {
+    try{
 
-    await addDoc(
-        collection(db, "siswa"),
-        siswa
-    );
+        await addDoc(
+            collection(db,"siswa"),
+            siswa
+        );
+
+        bootstrap.Modal
+        .getInstance(document.getElementById("modalSiswa"))
+        .hide();
+
+        document.getElementById("nama").value="";
+        document.getElementById("kelas").selectedIndex=0;
+        document.getElementById("kategori").selectedIndex=0;
+
+        tampilkan();
+
+        alert("Data berhasil disimpan.");
+
+    }catch(err){
+
+        console.error(err);
+
+        alert("Gagal menyimpan ke Firebase");
+
+    }
 
 }
 
@@ -145,67 +162,72 @@ function nomorUlang(){
     });
 
 }
-function tampilkan(){
-    
-    const sekolahAktif = localStorage.getItem("sekolahAktif");
+async function tampilkan(){
 
-    const tbody = document.getElementById("tbodySiswa");
+    const sekolahAktif =
+        localStorage.getItem("sekolahAktif");
+
+    const tbody =
+        document.getElementById("tbodySiswa");
 
     tbody.innerHTML="";
 
-    const dataFilter = dataSiswa.filter(function(item){
+    const snapshot =
+        await getDocs(collection(db,"siswa"));
 
-        return item.sekolah === sekolahAktif;
+    let no = 1;
 
-    });
+    snapshot.forEach(doc=>{
 
-    dataFilter.forEach(function(item,index){
+        const item = doc.data();
+
+        if(item.sekolah !== sekolahAktif) return;
 
         tbody.innerHTML += `
-<tr>
+        <tr>
 
-    <td>${index+1}</td>
+            <td>${no++}</td>
 
-    <td>${item.nama}</td>
+            <td>${item.nama}</td>
 
-    <td>${item.kelas}</td>
+            <td>${item.kelas}</td>
 
-    <td>${item.sekolah}</td>
+            <td>${item.sekolah}</td>
 
-    <td>${item.kategori}</td>
+            <td>${item.kategori}</td>
 
-    <td>
+            <td>
 
-        <span class="badge bg-success">
+                <span class="badge bg-success">
 
-            Aktif
+                    Aktif
 
-        </span>
+                </span>
 
-    </td>
+            </td>
 
-    <td>
+            <td>
 
-        <button
-            class="btn btn-warning btn-sm"
-            onclick="editSiswa(${index})">
+                <button
+                    class="btn btn-warning btn-sm"
+                    disabled>
 
-            <i class="bi bi-pencil-fill"></i>
+                    <i class="bi bi-pencil-fill"></i>
 
-        </button>
+                </button>
 
-        <button
-            class="btn btn-danger btn-sm"
-            onclick="hapus(${index})">
+                <button
+                    class="btn btn-danger btn-sm"
+                    disabled>
 
-            <i class="bi bi-trash-fill"></i>
+                    <i class="bi bi-trash-fill"></i>
 
-        </button>
+                </button>
 
-    </td>
+            </td>
 
-</tr>
-`;
+        </tr>
+        `;
 
     });
 
@@ -361,26 +383,4 @@ import {
     getDocs
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-async function tesFirebase() {
 
-    try {
-
-        const doc = await addDoc(
-            collection(db, "tes"),
-            {
-                nama: "Codero",
-                waktu: new Date().toISOString()
-            }
-        );
-
-        console.log("Berhasil", doc.id);
-
-    } catch (e) {
-
-        console.error(e);
-
-    }
-
-}
-
-tesFirebase();
