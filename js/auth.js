@@ -164,3 +164,6 @@ function logout() {
     }
 
 }
+
+window.checkLogin = checkLogin;
+window.logout = logout;
