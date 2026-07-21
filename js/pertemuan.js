@@ -653,3 +653,6 @@ catch(err){
 
 window.simpanStatusPertemuan =
     simpanStatusPertemuan;
+window.bukaPertemuan = bukaPertemuan;
+window.bukaAbsensi = bukaAbsensi;
+window.simpanStatusPertemuan = simpanStatusPertemuan;
