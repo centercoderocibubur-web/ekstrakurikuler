@@ -147,28 +147,6 @@ async function loadAbsensi(){
 
 }
 
-    // Cari data absensi yang sudah pernah disimpan
-    const absensi =
-    dbAbsensi.find(function(item){
-
-        return item.sekolah === sekolah &&
-               item.tanggal === tanggalPertemuan;
-
-    });
-
-    // Jika ditemukan, timpa status default
-    if(absensi){
-
-        absensi.siswa.forEach(function(item){
-
-            statusMap[item.nama] = item.status;
-
-        });
-
-    }
-
-}
-
 // ==========================================
 // LOAD DATA PERTAMA
 // ==========================================
