@@ -1,3 +1,10 @@
+import { db } from "./firebase.js";
+
+import {
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
 // ==========================================
 // ABSENSI SISWA.JS
 // CODERO CIBUBUR
@@ -24,21 +31,35 @@ if (!sekolah || !tanggalPertemuan) {
 // LOAD DATABASE
 // ==========================================
 
-const dbSiswa =
-JSON.parse(localStorage.getItem("siswa")) || [];
+let siswaSekolah = [];
 
-let dbAbsensi =
-JSON.parse(localStorage.getItem("absensi")) || [];
+async function loadSiswa(){
 
-// ==========================================
-// FILTER SISWA SEKOLAH
-// ==========================================
+    siswaSekolah = [];
 
-const siswaSekolah = dbSiswa.filter(function(item){
+    const snapshot = await getDocs(
+        collection(db,"siswa")
+    );
 
-    return item.sekolah === sekolah;
+    snapshot.forEach(doc=>{
 
-});
+        const data = doc.data();
+
+        if(data.sekolah === sekolah){
+
+            siswaSekolah.push({
+
+                id: doc.id,
+
+                ...data
+
+            });
+
+        }
+
+    });
+
+}
 
 // ==========================================
 // ELEMENT HTML
@@ -91,7 +112,7 @@ tanggal.toLocaleDateString("id-ID",{
 let statusMap = {};
 
 // Data siswa yang sedang tampil
-let dataTampil = [...siswaSekolah];
+let dataTampil = [];
 
 // ==========================================
 // LOAD ABSENSI
@@ -410,15 +431,16 @@ inputCari.addEventListener("keyup", function(){
 
 function refreshData(){
 
-    loadAbsensi();
+    async function init(){
+
+    await loadSiswa();
 
     dataTampil = [...siswaSekolah];
 
-    if(inputCari){
+    document.getElementById("jumlahSiswa").textContent =
+        siswaSekolah.length;
 
-        inputCari.value = "";
-
-    }
+    loadAbsensi();
 
     renderSiswa(dataTampil);
 
@@ -426,6 +448,7 @@ function refreshData(){
 
 }
 
+init();
 // ==========================================
 // SIMPAN ABSENSI
 // ==========================================
