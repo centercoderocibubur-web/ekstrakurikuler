@@ -1,3 +1,8 @@
+import { checkLogin } from "./auth.js";
+
+checkLogin();
+
+
 import { db } from "./firebase.js";
 
 import {
