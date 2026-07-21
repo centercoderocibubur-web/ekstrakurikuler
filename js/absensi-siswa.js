@@ -533,7 +533,6 @@ console.log("Sekolah :", sekolah);
 console.log("Pertemuan :", pertemuan);
 console.log("Tanggal :", tanggalPertemuan);
 console.log("Jumlah Siswa :", siswaSekolah.length);
-console.log("Jumlah Absensi :", dbAbsensi.length);
 
 // ==========================================
 // SELESAI
