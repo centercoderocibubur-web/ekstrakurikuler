@@ -433,22 +433,24 @@ function refreshData(){
 
     async function init(){
 
-    await loadSiswa();
+        await loadSiswa();
 
-    dataTampil = [...siswaSekolah];
+        dataTampil = [...siswaSekolah];
 
-    document.getElementById("jumlahSiswa").textContent =
-        siswaSekolah.length;
+        document.getElementById("jumlahSiswa").textContent =
+            siswaSekolah.length;
 
-    loadAbsensi();
+        loadAbsensi();
 
-    renderSiswa(dataTampil);
+        renderSiswa(dataTampil);
 
-    updateRingkasan();
+        updateRingkasan();
+
+    }
+
+    init();
 
 }
-
-init();
 // ==========================================
 // SIMPAN ABSENSI
 // ==========================================
@@ -540,6 +542,7 @@ console.log("Jumlah Absensi :", dbAbsensi.length);
 // ==========================================
 
 window.hadirSemua = hadirSemua;
-window.tidakHadirSemua = tidakHadirSemua;
+window.resetAbsensi = resetAbsensi;
 window.simpanAbsensi = simpanAbsensi;
 window.kembali = kembali;
+window.ubahStatus = ubahStatus;
