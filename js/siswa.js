@@ -1,204 +1,290 @@
+/*=========================================
+  SISWA.JS
+  Sistem Informasi Ekstrakurikuler
+  CODERO CIBUBUR
+=========================================*/
+
+// ======================================
+// IMPORT
+// ======================================
+
 import { checkLogin } from "./auth.js";
-
-checkLogin();
-
 import { db } from "./firebase.js";
 
 import {
+
     collection,
     addDoc,
-    getDocs
+    getDocs,
+    updateDoc,
+    deleteDoc,
+    doc
+
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-tampilkan();
+// ======================================
+// LOGIN
+// ======================================
 
-async function tambahSiswa(){
+checkLogin();
 
-    const siswa = {
+// ======================================
+// VARIABEL GLOBAL
+// ======================================
 
-        nama: document.getElementById("nama").value.trim(),
-        kelas: document.getElementById("kelas").value,
-        sekolah: document.getElementById("sekolah").value,
-        kategori: document.getElementById("kategori").value
+const tabel = document.getElementById("tbodySiswa");
 
-    };
+const modalElement = document.getElementById("modalSiswa");
 
-    if(
-        siswa.nama === "" ||
-        siswa.kelas === ""
-    ){
-        alert("Semua data harus diisi!");
+const modalTambah = new bootstrap.Modal(modalElement);
+
+const modalBulkElement =
+document.getElementById("modalBanyak");
+
+const modalBulk = modalBulkElement
+    ? new bootstrap.Modal(modalBulkElement)
+    : null;
+
+// koleksi firebase
+
+const siswaCollection =
+collection(db,"siswa");
+
+// sekolah aktif
+
+let sekolahAktif =
+localStorage.getItem("sekolahAktif") || "";
+
+// data sementara
+
+let dataSiswa = [];
+
+// id dokumen ketika edit
+
+let editId = null;
+
+// ======================================
+// DOM READY
+// ======================================
+
+document.addEventListener("DOMContentLoaded", init);
+
+let keyword = "";
+let filterKategori = "Semua";
+
+// ======================================
+// INIT
+// ======================================
+
+async function init(){
+
+    // pastikan sekolah dipilih
+
+    if(!sekolahAktif){
+
+        alert("Silakan pilih sekolah terlebih dahulu.");
+
+        window.location.href="pilih-sekolah.html";
+
         return;
-    }
-
-    try{
-
-        await addDoc(
-            collection(db,"siswa"),
-            siswa
-        );
-
-        bootstrap.Modal
-        .getInstance(document.getElementById("modalSiswa"))
-        .hide();
-
-        document.getElementById("nama").value="";
-        document.getElementById("kelas").selectedIndex=0;
-        document.getElementById("kategori").selectedIndex=0;
-
-        tampilkan();
-
-        alert("Data berhasil disimpan.");
-
-    }catch(err){
-
-        console.error(err);
-
-        alert("Gagal menyimpan ke Firebase");
 
     }
 
-}
+    // isi nama sekolah di form
 
+    const sekolahInput =
+    document.getElementById("sekolah");
 
-    // Tutup modal
-    bootstrap.Modal.getInstance(document.getElementById("modalSiswa")).hide();
+    if(sekolahInput){
 
-    // Reset form
-    document.getElementById("nama").value="";
-    document.getElementById("kelas").value="";
-    document.getElementById("kategori").selectedIndex=0;
+        sekolahInput.value = sekolahAktif;
 
-    // Refresh tabel
-    tampilkan();
+    }
 
-}
-function tambahBaris(){
+    // event tombol
 
-    const tbody = document.getElementById("bulkBody");
+    pasangEvent();
+const txtCari =
+document.getElementById("cariNama");
 
-    const nomor = tbody.rows.length + 1;
+if(txtCari){
 
-    tbody.innerHTML += `
+    txtCari.addEventListener("input",function(){
 
-    <tr>
+        keyword = this.value;
 
-        <td>${nomor}</td>
-
-        <td>
-
-            <input
-            class="form-control namaBulk">
-
-        </td>
-
-        <td>
-
-            <select class="form-select kelasBulk">
-
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-                <option>6</option>
-                <option>7</option>
-                <option>8</option>
-                <option>9</option>
-                <option>10</option>
-                <option>11</option>
-                <option>12</option>
-
-            </select>
-
-        </td>
-
-        <td>
-
-            <select class="form-select kategoriBulk">
-
-                <option>Coding</option>
-
-                <option>Robotik</option>
-
-                <option>Roblox</option>
-
-                <option>Digital Art</option>
-
-                <option>AI</option>
-
-            </select>
-
-        </td>
-
-        <td class="text-center">
-
-            <button
-                class="btn btn-danger btn-sm"
-                onclick="hapusBaris(this)">
-
-                <i class="bi bi-trash"></i>
-
-            </button>
-
-        </td>
-
-    </tr>
-
-    `;
-
-}
-function hapusBaris(btn){
-
-    btn.closest("tr").remove();
-
-    nomorUlang();
-
-}
-function nomorUlang(){
-
-    const rows = document.querySelectorAll("#bulkBody tr");
-
-    rows.forEach((row,index)=>{
-
-        row.cells[0].innerText = index+1;
+        renderTabel();
 
     });
 
 }
-async function tampilkan(){
+    const cmbKategori =
+document.getElementById("filterKategori");
 
-    const sekolahAktif =
-        localStorage.getItem("sekolahAktif");
+if(cmbKategori){
 
-    const tbody =
-        document.getElementById("tbodySiswa");
+    cmbKategori.addEventListener("change",function(){
 
-    tbody.innerHTML="";
+        filterKategori = this.value;
 
-    const snapshot =
-        await getDocs(collection(db,"siswa"));
+        renderTabel();
 
-    let no = 1;
+    });
 
-    snapshot.forEach(doc=>{
+}
+    // tampilkan data
 
-        const item = doc.data();
+    await loadSiswa();
 
-        if(item.sekolah !== sekolahAktif) return;
+}
 
-        tbody.innerHTML += `
+// ======================================
+// EVENT LISTENER
+// ======================================
+
+function pasangEvent(){
+
+    // tombol tambah siswa
+
+    const btnTambah =
+    document.getElementById("btnTambahSiswa");
+
+    if(btnTambah){
+
+        btnTambah.addEventListener("click",modeTambah);
+
+    }
+
+    // tombol simpan
+
+    const btnSimpan =
+    document.getElementById("btnSimpanSiswa");
+
+    if(btnSimpan){
+
+        btnSimpan.addEventListener("click",simpanSiswa);
+
+    }
+
+    // tambah banyak
+
+    const btnTambahBaris =
+    document.getElementById("btnTambahBaris");
+
+    if(btnTambahBaris){
+
+        btnTambahBaris.addEventListener("click",tambahBaris);
+
+    }
+
+    const btnSimpanSemua =
+    document.getElementById("btnSimpanSemua");
+
+    if(btnSimpanSemua){
+
+        btnSimpanSemua.addEventListener("click",simpanSemua);
+
+    }
+
+}
+
+// ======================================
+// LOAD DATA FIREBASE
+// ======================================
+
+async function loadSiswa(){
+
+    try{
+
+        dataSiswa = [];
+
+        const snapshot =
+        await getDocs(siswaCollection);
+
+        snapshot.forEach((item)=>{
+
+            const siswa = item.data();
+
+            siswa.id = item.id;
+
+            if(siswa.sekolah===sekolahAktif){
+
+                dataSiswa.push(siswa);
+
+            }
+
+        });
+
+        console.log(
+            "Jumlah siswa :",
+            dataSiswa.length
+        );
+
+        renderTabel();
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        alert("Gagal mengambil data siswa.");
+
+    }
+
+}
+
+/*=========================================
+  RENDER TABEL
+=========================================*/
+
+function renderTabel(){
+
+    tabel.innerHTML = "";
+let hasil = dataSiswa.filter(function(item){
+
+    const cocokNama =
+        item.nama
+            .toLowerCase()
+            .includes(keyword.toLowerCase());
+
+    const cocokKategori =
+        filterKategori === "Semua" ||
+        item.kategori === filterKategori;
+
+    return cocokNama && cocokKategori;
+
+});
+    if(hasil.length===0)
+
+        tabel.innerHTML = `
+            <tr>
+                <td colspan="7" class="text-center text-muted py-4">
+
+                    Belum ada data siswa.
+
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+hasil.forEach((siswa,index)=>{
+
+        tabel.innerHTML += `
+
         <tr>
 
-            <td>${no++}</td>
+            <td>${index+1}</td>
 
-            <td>${item.nama}</td>
+            <td>${siswa.nama}</td>
 
-            <td>${item.kelas}</td>
+            <td>${siswa.kelas}</td>
 
-            <td>${item.sekolah}</td>
+            <td>${siswa.sekolah}</td>
 
-            <td>${item.kategori}</td>
+            <td>${siswa.kategori}</td>
 
             <td>
 
@@ -213,16 +299,16 @@ async function tampilkan(){
             <td>
 
                 <button
-                    class="btn btn-warning btn-sm"
-                    disabled>
+                    class="btn btn-warning btn-sm btn-edit"
+                    data-id="${siswa.id}">
 
                     <i class="bi bi-pencil-fill"></i>
 
                 </button>
 
                 <button
-                    class="btn btn-danger btn-sm"
-                    disabled>
+                    class="btn btn-danger btn-sm btn-hapus"
+                    data-id="${siswa.id}">
 
                     <i class="bi bi-trash-fill"></i>
 
@@ -231,183 +317,470 @@ async function tampilkan(){
             </td>
 
         </tr>
+
         `;
+
+    });
+
+    pasangEventTabel();
+
+}
+
+/*=========================================
+  EVENT EDIT & HAPUS
+=========================================*/
+
+function pasangEventTabel(){
+
+    document.querySelectorAll(".btn-edit")
+    .forEach(btn=>{
+
+        btn.addEventListener("click",()=>{
+
+            editSiswa(btn.dataset.id);
+
+        });
+
+    });
+
+    document.querySelectorAll(".btn-hapus")
+    .forEach(btn=>{
+
+        btn.addEventListener("click",()=>{
+
+            hapusSiswa(btn.dataset.id);
+
+        });
 
     });
 
 }
 
-function hapus(index){
-
-    const sekolahAktif = localStorage.getItem("sekolahAktif");
-
-    const dataFilter = dataSiswa.filter(item => item.sekolah === sekolahAktif);
-
-    const siswa = dataFilter[index];
-
-    const indexAsli = dataSiswa.findIndex(item =>
-        item.nis === siswa.nis &&
-        item.sekolah === siswa.sekolah
-    );
-
-    if(indexAsli !== -1){
-
-        if(confirm("Hapus siswa ini?")){
-
-            dataSiswa.splice(indexAsli,1);
-
-            localStorage.setItem("siswa", JSON.stringify(dataSiswa));
-
-            tampilkan();
-
-        }
-
-    }
-
-}
-
-function editSiswa(index){
-    
-    const sekolahAktif = localStorage.getItem("sekolahAktif");
-
-    const dataFilter = dataSiswa.filter(item => item.sekolah === sekolahAktif);
-
-    const siswa = dataFilter[index];
-
-    editIndex = dataSiswa.findIndex(item =>
-
-        item.nis === siswa.nis &&
-        item.sekolah === siswa.sekolah
-
-    );
-
-    document.getElementById("nama").value = siswa.nama;
-
-    document.getElementById("kelas").value = siswa.kelas;
-
-    document.getElementById("kategori").value = siswa.kategori;
-
-    document.getElementById("judulModal").innerText = "Edit Siswa";
-
-    const modal = new bootstrap.Modal(document.getElementById("modalSiswa"));
-
-    modal.show();
-
-}
+/*=========================================
+  MODE TAMBAH
+=========================================*/
 
 function modeTambah(){
 
-    editIndex = -1;
+    editId = null;
 
-    document.getElementById("judulModal").innerText = "Tambah Siswa";
+    document.getElementById("judulModal").innerText =
+    "Tambah Siswa";
 
     document.getElementById("nama").value="";
-    document.getElementById("kelas").value="";
+
+    document.getElementById("kelas").selectedIndex=0;
+
     document.getElementById("kategori").selectedIndex=0;
-    document.getElementById("kelas").selectedIndex = 0;
-    document.getElementById("sekolah").selectedIndex = 0;
+
+    document.getElementById("sekolah").value =
+    sekolahAktif;
 
 }
 
-const modalBanyak = document.getElementById("modalBanyak");
+/*=========================================
+  EDIT SISWA
+=========================================*/
 
-if(modalBanyak){
+function editSiswa(id){
 
-    modalBanyak.addEventListener("show.bs.modal",function(){
+    const siswa = dataSiswa.find(item=>item.id===id);
 
-    document.getElementById("namaSekolahBulk").textContent =
-        localStorage.getItem("sekolahAktif");
+    if(!siswa) return;
 
-    const tbody = document.getElementById("bulkBody");
+    editId = id;
 
-    tbody.innerHTML="";
+    document.getElementById("judulModal").innerText =
+    "Edit Siswa";
 
-    for(let i=0;i<5;i++){
+    document.getElementById("nama").value =
+    siswa.nama;
 
-        tambahBaris();
+    document.getElementById("kelas").value =
+    siswa.kelas;
+
+    document.getElementById("kategori").value =
+    siswa.kategori;
+
+    document.getElementById("sekolah").value =
+    siswa.sekolah;
+
+    modalTambah.show();
+
+}
+
+/*=========================================
+  RESET FORM
+=========================================*/
+
+function resetForm(){
+
+    editId = null;
+
+    document.getElementById("nama").value="";
+
+    document.getElementById("kelas").selectedIndex=0;
+
+    document.getElementById("kategori").selectedIndex=0;
+
+    document.getElementById("sekolah").value =
+    sekolahAktif;
+
+}
+
+/*=========================================
+  SIMPAN SISWA
+=========================================*/
+
+async function simpanSiswa(){
+
+    const nama =
+    document.getElementById("nama").value.trim();
+
+    const kelas =
+    document.getElementById("kelas").value;
+
+    const kategori =
+    document.getElementById("kategori").value;
+
+    const sekolah =
+    document.getElementById("sekolah").value;
+
+    // validasi
+
+    if(nama===""){
+
+        alert("Nama siswa belum diisi.");
+
+        return;
 
     }
 
-});
+    if(kelas===""){
 
-}
+        alert("Kelas belum dipilih.");
 
-function simpanSemua(){
-
-    const sekolahAktif = localStorage.getItem("sekolahAktif");
-
-    const nama = document.querySelectorAll(".namaBulk");
-    const kelas = document.querySelectorAll(".kelasBulk");
-    const kategori = document.querySelectorAll(".kategoriBulk");
-
-    let dataSiswa = JSON.parse(localStorage.getItem("siswa")) || [];
-
-    let jumlahTambah = 0;
-
-    for(let i=0;i<nama.length;i++){
-
-        const namaSiswa = nama[i].value.trim();
-
-        if(namaSiswa === "") continue;
-
-        dataSiswa.push({
-
-            nama: namaSiswa,
-
-            kelas: kelas[i].value,
-
-            sekolah: sekolahAktif,
-
-            kategori: kategori[i].value
-
-        });
-
-        jumlahTambah++;
+        return;
 
     }
 
-    localStorage.setItem(
-        "siswa",
-        JSON.stringify(dataSiswa)
-    );
+    const data={
 
-    tampilkan();
+        nama:nama,
+        kelas:kelas,
+        sekolah:sekolah,
+        kategori:kategori,
+        dibuat:new Date().toISOString()
 
-    alert(jumlahTambah + " siswa berhasil ditambahkan.");
+    };
 
-    bootstrap.Modal.getInstance(
-        document.getElementById("modalBanyak")
-    ).hide();
+    try{
+
+        // ==========================
+        // EDIT
+        // ==========================
+
+        if(editId){
+
+            await updateDoc(
+
+                doc(db,"siswa",editId),
+
+                data
+
+            );
+
+            alert("Data berhasil diperbarui.");
+
+        }
+
+        // ==========================
+        // TAMBAH
+        // ==========================
+
+        else{
+
+            await addDoc(
+
+                siswaCollection,
+
+                data
+
+            );
+
+            alert("Siswa berhasil ditambahkan.");
+
+        }
+
+        modalTambah.hide();
+
+        resetForm();
+
+        await loadSiswa();
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        alert("Gagal menyimpan data.");
+
+    }
 
 }
 
-import {
-    collection,
-    addDoc,
-    getDocs
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+/*=========================================
+  HAPUS SISWA
+=========================================*/
 
-window.tambahSiswa = tambahSiswa;
-window.modeTambah = modeTambah;
-window.editSiswa = editSiswa;
-window.hapus = hapus;
-window.tambahBaris = tambahBaris;
-window.hapusBaris = hapusBaris;
-window.simpanSemua = simpanSemua;
-window.tampilkan = tampilkan;
+async function hapusSiswa(id){
 
-document
-    .getElementById("btnTambahSiswa")
-    .addEventListener("click", modeTambah);
+    const yakin =
+    confirm("Yakin ingin menghapus siswa ini?");
 
-document
-    .getElementById("btnTambahBaris")
-    .addEventListener("click", tambahBaris);
+    if(!yakin) return;
 
-document
-    .getElementById("btnSimpanSemua")
-    .addEventListener("click", simpanSemua);
+    try{
 
-document
-    .getElementById("btnSimpanSiswa")
-    .addEventListener("click", tambahSiswa);
+        await deleteDoc(
+
+            doc(db,"siswa",id)
+
+        );
+
+        alert("Data berhasil dihapus.");
+
+        await loadSiswa();
+
+    }
+    catch(err){
+
+        console.error(err);
+
+        alert("Gagal menghapus data.");
+
+    }
+
+}
+
+/*=========================================
+  TAMBAH BARIS
+=========================================*/
+
+function tambahBaris(){
+
+    const tbody =
+    document.getElementById("bulkBody");
+
+    const nomor =
+    tbody.rows.length + 1;
+
+    tbody.insertAdjacentHTML("beforeend",`
+
+<tr>
+
+<td>${nomor}</td>
+
+<td>
+
+<input
+class="form-control namaBulk">
+
+</td>
+
+<td>
+
+<select class="form-select kelasBulk">
+
+<option>1</option>
+<option>2</option>
+<option>3</option>
+<option>4</option>
+<option>5</option>
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+<option>11</option>
+<option>12</option>
+
+</select>
+
+</td>
+
+<td>
+
+<select
+class="form-select kategoriBulk">
+
+<option>Coding</option>
+
+<option>Robotik</option>
+
+<option>Roblox</option>
+
+<option>Digital Art</option>
+
+<option>AI</option>
+
+</select>
+
+</td>
+
+<td class="text-center">
+
+<button
+class="btn btn-danger btn-sm btnHapusBaris">
+
+<i class="bi bi-trash"></i>
+
+</button>
+
+</td>
+
+</tr>
+
+`);
+
+    tbody
+    .lastElementChild
+    .querySelector(".btnHapusBaris")
+    .addEventListener("click",function(){
+
+        this.closest("tr").remove();
+
+        nomorUlang();
+
+    });
+
+}
+
+/*=========================================
+  NOMOR ULANG
+=========================================*/
+
+function nomorUlang(){
+
+    document
+    .querySelectorAll("#bulkBody tr")
+    .forEach((row,index)=>{
+
+        row.cells[0].innerHTML =
+        index+1;
+
+    });
+
+}
+
+/*=========================================
+  MODAL BANYAK
+=========================================*/
+
+if(modalBulkElement){
+
+modalBulkElement.addEventListener(
+
+"show.bs.modal",
+
+function(){
+
+document.getElementById(
+"namaSekolahBulk"
+).textContent = sekolahAktif;
+
+const tbody =
+document.getElementById("bulkBody");
+
+tbody.innerHTML="";
+
+for(let i=0;i<5;i++){
+
+tambahBaris();
+
+}
+
+}
+
+);
+
+}
+
+/*=========================================
+  SIMPAN SEMUA
+=========================================*/
+
+async function simpanSemua(){
+
+const nama =
+document.querySelectorAll(".namaBulk");
+
+const kelas =
+document.querySelectorAll(".kelasBulk");
+
+const kategori =
+document.querySelectorAll(".kategoriBulk");
+
+let jumlah=0;
+
+try{
+
+for(let i=0;i<nama.length;i++){
+
+const isiNama =
+nama[i].value.trim();
+
+if(isiNama===""){
+
+continue;
+
+}
+
+await addDoc(
+
+siswaCollection,
+
+{
+
+nama:isiNama,
+
+kelas:kelas[i].value,
+
+kategori:kategori[i].value,
+
+sekolah:sekolahAktif,
+
+dibuat:new Date().toISOString()
+
+}
+
+);
+
+jumlah++;
+
+}
+
+modalBulk.hide();
+
+await loadSiswa();
+
+alert(
+
+jumlah +
+
+" siswa berhasil ditambahkan."
+
+);
+
+}
+
+catch(err){
+
+console.error(err);
+
+alert("Gagal menyimpan.");
+
+}
+
+}
+
