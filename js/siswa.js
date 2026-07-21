@@ -205,8 +205,7 @@ async function loadSiswa(){
 
         dataSiswa = [];
 
-        const snapshot =
-        await getDocs(siswaCollection);
+        const snapshot = await getDocs(siswaCollection);
 
         snapshot.forEach((item)=>{
 
@@ -222,10 +221,7 @@ async function loadSiswa(){
 
         });
 
-        console.log(
-            "Jumlah siswa :",
-            dataSiswa.length
-        );
+        console.log("Jumlah siswa :", dataSiswa.length);
 
         renderTabel();
 
@@ -238,6 +234,7 @@ async function loadSiswa(){
 
     }
 
+}   // <-- TAMBAHKAN INI
 
 /*=========================================
   RENDER TABEL
@@ -329,6 +326,8 @@ hasil.forEach((siswa,index)=>{
     });
 
     pasangEventTabel();
+
+}
 
 /*=========================================
   EVENT EDIT & HAPUS
