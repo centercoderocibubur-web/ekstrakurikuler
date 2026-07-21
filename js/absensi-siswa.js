@@ -538,3 +538,8 @@ console.log("Jumlah Absensi :", dbAbsensi.length);
 // ==========================================
 // SELESAI
 // ==========================================
+
+window.hadirSemua = hadirSemua;
+window.tidakHadirSemua = tidakHadirSemua;
+window.simpanAbsensi = simpanAbsensi;
+window.kembali = kembali;
