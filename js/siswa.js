@@ -324,7 +324,7 @@ hasil.forEach((siswa,index)=>{
 
     pasangEventTabel();
 
-
+}
 
 /*=========================================
   EVENT EDIT & HAPUS
