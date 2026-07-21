@@ -231,7 +231,6 @@ async function loadSiswa(){
 
     }
 
-}
 
 /*=========================================
   RENDER TABEL
@@ -256,19 +255,19 @@ function renderTabel(){
 
     });
 
-    if (hasil.length === 0) {
+   if(hasil.length===0){
 
-        tabel.innerHTML = `
-            <tr>
-                <td colspan="7" class="text-center text-muted py-4">
-                    Belum ada data siswa.
-                </td>
-            </tr>
-        `;
+    tabel.innerHTML = `
+        <tr>
+            <td colspan="7" class="text-center">
+                Belum ada data siswa.
+            </td>
+        </tr>
+    `;
 
-        return;
+    return;
 
-    }
+}
 
 hasil.forEach((siswa,index)=>{
 
@@ -323,8 +322,6 @@ hasil.forEach((siswa,index)=>{
     });
 
     pasangEventTabel();
-
-}
 
 /*=========================================
   EVENT EDIT & HAPUS
