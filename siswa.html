@@ -170,11 +170,11 @@
 
     <!-- Tambah Siswa -->
 
-    <button
-        class="btn btn-primary"
-        onclick="modeTambah()"
-        data-bs-toggle="modal"
-        data-bs-target="#modalSiswa">
+   <button
+    id="btnTambahSiswa"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#modalSiswa">
 
         <i class="bi bi-plus-circle"></i>
 
@@ -301,13 +301,7 @@
 
 </div>
 
-<script type="module" src="js/auth.js"></script>
 <script type="module" src="js/siswa.js"></script>
-<script>
-
-checkLogin();
-
-</script>
 
 <!-- ======================================
      MODAL TAMBAH BANYAK SISWA
@@ -379,8 +373,8 @@ checkLogin();
 <div class="mt-3">
 
     <button
-        class="btn btn-success"
-        onclick="tambahBaris()">
+    id="btnTambahBaris"
+    class="btn btn-success">
 
         <i class="bi bi-plus-circle"></i>
 
@@ -403,8 +397,8 @@ checkLogin();
     </button>
 
     <button
-        class="btn btn-primary"
-        onclick="simpanSemua()">
+    id="btnSimpanSemua"
+    class="btn btn-primary">
 
         <i class="bi bi-check-circle"></i>
 
@@ -535,8 +529,8 @@ Batal
 </button>
 
 <button
-class="btn btn-primary"
-onclick="tambahSiswa()">
+id="btnSimpanSiswa"
+class="btn btn-primary">
 
 Simpan
 
