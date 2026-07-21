@@ -1,9 +1,3 @@
-async function tambahSiswa(){
-
-    console.log("Tombol Simpan diklik");
-
-    ...
-}
 
 /*=========================================
   SISWA.JS
