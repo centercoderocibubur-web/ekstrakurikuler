@@ -1,3 +1,9 @@
+import { db } from "./firebase.js";
+import {
+    collection,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
+
 // =======================================
 // PERTEMUAN.JS
 // CODERO CIBUBUR
@@ -496,7 +502,7 @@ function bukaAbsensi(tanggal, nomor){
 // Simpan Status Pertemuan
 // -------------------------------------
 
-function simpanStatusPertemuan(){
+async function simpanStatusPertemuan(){
 
     
     const nomor = Number(
@@ -555,7 +561,38 @@ function simpanStatusPertemuan(){
         JSON.stringify(data)
 
     );
+try{
 
+    await addDoc(
+
+        collection(db,"statusPertemuan"),
+
+        {
+
+            sekolah: sekolah,
+
+            tanggal: tanggal,
+
+            pertemuan: nomor,
+
+            status: status,
+
+            dibuat: new Date().toISOString()
+
+        }
+
+    );
+
+    console.log("Status berhasil disimpan ke Firebase");
+
+}
+catch(err){
+
+    console.error(err);
+
+    alert("Gagal menyimpan status ke Firebase.");
+
+}
     modalStatus.hide();
 
     location.reload();
@@ -613,3 +650,6 @@ function simpanStatusPertemuan(){
     location.reload();
 
 }
+
+window.simpanStatusPertemuan =
+    simpanStatusPertemuan;
