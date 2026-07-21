@@ -1,3 +1,7 @@
+import { checkLogin } from "./auth.js";
+
+checkLogin();
+
 import { db } from "./firebase.js";
 
 import {
@@ -392,3 +396,18 @@ window.hapusBaris = hapusBaris;
 window.simpanSemua = simpanSemua;
 window.tampilkan = tampilkan;
 
+document
+    .getElementById("btnTambahSiswa")
+    .addEventListener("click", modeTambah);
+
+document
+    .getElementById("btnTambahBaris")
+    .addEventListener("click", tambahBaris);
+
+document
+    .getElementById("btnSimpanSemua")
+    .addEventListener("click", simpanSemua);
+
+document
+    .getElementById("btnSimpanSiswa")
+    .addEventListener("click", tambahSiswa);
