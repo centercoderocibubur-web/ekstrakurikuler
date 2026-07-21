@@ -240,28 +240,28 @@ async function loadSiswa(){
 function renderTabel(){
 
     tabel.innerHTML = "";
-let hasil = dataSiswa.filter(function(item){
 
-    const cocokNama =
-        item.nama
-            .toLowerCase()
-            .includes(keyword.toLowerCase());
+    let hasil = dataSiswa.filter(function(item){
 
-    const cocokKategori =
-        filterKategori === "Semua" ||
-        item.kategori === filterKategori;
+        const cocokNama =
+            item.nama
+                .toLowerCase()
+                .includes(keyword.toLowerCase());
 
-    return cocokNama && cocokKategori;
+        const cocokKategori =
+            filterKategori === "Semua" ||
+            item.kategori === filterKategori;
 
-});
-    if(hasil.length===0)
+        return cocokNama && cocokKategori;
+
+    });
+
+    if (hasil.length === 0) {
 
         tabel.innerHTML = `
             <tr>
                 <td colspan="7" class="text-center text-muted py-4">
-
                     Belum ada data siswa.
-
                 </td>
             </tr>
         `;
@@ -324,7 +324,7 @@ hasil.forEach((siswa,index)=>{
 
     pasangEventTabel();
 
-}
+
 
 /*=========================================
   EVENT EDIT & HAPUS
