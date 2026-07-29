@@ -117,7 +117,7 @@ if (loginForm) {
 
             setTimeout(() => {
 
-                window.location.href = "dashboard.html";
+                window.location.href = "dashboard/";
 
             }, 800);
 
@@ -143,7 +143,7 @@ function checkLogin() {
 
     if (sessionStorage.getItem("isLogin") !== "true") {
 
-        window.location.href = "index.html";
+        window.location.href = "../";
 
     }
 
@@ -159,7 +159,7 @@ function logout() {
 
         sessionStorage.removeItem("isLogin");
 
-        window.location.href = "index.html";
+        window.location.href = "../";
 
     }
 
