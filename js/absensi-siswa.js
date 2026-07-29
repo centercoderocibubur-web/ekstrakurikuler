@@ -28,7 +28,7 @@ if (!sekolah || !tanggalPertemuan) {
 
     alert("Data pertemuan tidak ditemukan.");
 
-    window.location.href = "pertemuan.html";
+    window.location.href = "../pertemuan/";
 
 }
 
@@ -479,7 +479,7 @@ if(snapshot.empty){
 }
     alert("Absensi berhasil disimpan.");
 
-    window.location.href = "pertemuan.html";
+    window.location.href = "../pertemuan/";
 
 }
 
@@ -491,7 +491,7 @@ function kembali(){
 
     if(confirm("Kembali ke halaman pertemuan?")){
 
-        window.location.href = "pertemuan.html";
+        window.location.href = "../pertemuan/";
 
     }
 
