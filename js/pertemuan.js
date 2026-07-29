@@ -2,8 +2,11 @@ import { db } from "./firebase.js";
 import {
     collection,
     addDoc,
+    deleteDoc,
+    doc,
     getDocs,
     query,
+    updateDoc,
     where
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
@@ -68,6 +71,7 @@ JSON.parse(
 ) || [];
 
 let daftarGuru = [];
+let overrideTanggal = [];
 
 // -------------------------------
 // Format Tanggal Indonesia
@@ -193,7 +197,7 @@ function hitungNomorPertemuan(){
 // Siapkan Data Pertemuan
 // -------------------------------
 
-const daftarPertemuan =
+let daftarPertemuan =
 hitungNomorPertemuan();
 
 const container =
@@ -325,6 +329,15 @@ function renderPertemuan(){
 
     let nomor = item.nomor ?? 0;
 
+    const tombolUbahTanggal = item.dihitung ? `
+        <button
+            class="btn btn-outline-secondary w-100 mt-2"
+            onclick="event.stopPropagation(); bukaUbahTanggal(${nomor})">
+            <i class="bi bi-calendar-event"></i>
+            Ubah Tanggal
+        </button>
+    ` : "";
+
 tombol = `
 
 <button
@@ -431,6 +444,8 @@ onclick="bukaPertemuan('${item.tanggal.toISOString().split("T")[0]}',${nomor})">
 
         </button>
 
+        ${tombolUbahTanggal}
+
     </div>
 
 </div>
@@ -462,17 +477,63 @@ async function loadRekapAbsensi(){
 
     }
 
+}
+
+async function loadOverrideTanggal(){
+
+    try{
+
+        const snapshot = await getDocs(
+            query(collection(db, "overrideTanggal"), where("sekolah", "==", sekolah))
+        );
+
+        overrideTanggal = snapshot.docs.map(function(item){
+            return { id:item.id, ...item.data() };
+        });
+
+        const overridePerNomor = new Map(
+            overrideTanggal.map(function(item){ return [Number(item.pertemuan), item]; })
+        );
+
+        daftarPertemuan.forEach(function(item){
+
+            const override = overridePerNomor.get(item.nomor);
+
+            if(item.dihitung && override && override.tanggal){
+                item.tanggal = new Date(`${override.tanggal}T00:00:00`);
+                item.overrideTanggal = true;
+            }
+
+        });
+
+    }
+    catch(err){
+
+        console.error("Gagal memuat override tanggal:", err);
+
+    }
+
+}
+
+async function initPertemuan(){
+
+    await Promise.all([
+        loadRekapAbsensi(),
+        loadOverrideTanggal()
+    ]);
+
     renderPertemuan();
 
 }
 
-loadRekapAbsensi();
+initPertemuan();
 
 // -------------------------------
 // Modal
 // -------------------------------
 
 let modalStatus;
+let modalUbahTanggal;
 
 document.addEventListener("DOMContentLoaded",function(){
 
@@ -480,6 +541,10 @@ document.addEventListener("DOMContentLoaded",function(){
 
         document.getElementById("modalStatus")
 
+    );
+
+    modalUbahTanggal = new bootstrap.Modal(
+        document.getElementById("modalUbahTanggal")
     );
 
     loadGuru();
@@ -509,6 +574,74 @@ async function loadGuru(){
     catch(err){
 
         console.error("Gagal memuat data guru:", err);
+
+    }
+
+}
+
+function bukaUbahTanggal(nomor){
+
+    const pertemuan = daftarPertemuan.find(function(item){
+        return item.dihitung && item.nomor === nomor;
+    });
+
+    const override = overrideTanggal.find(function(item){
+        return Number(item.pertemuan) === nomor;
+    });
+
+    document.getElementById("nomorOverrideTanggal").value = nomor;
+    document.getElementById("tanggalOverride").value = override
+        ? override.tanggal
+        : "";
+    document.getElementById("tanggalNormal").textContent = pertemuan
+        ? formatTanggal(pertemuan.tanggal)
+        : "-";
+
+    modalUbahTanggal.show();
+
+}
+
+async function simpanOverrideTanggal(){
+
+    const nomor = Number(document.getElementById("nomorOverrideTanggal").value);
+    const tanggal = document.getElementById("tanggalOverride").value;
+    const existing = overrideTanggal.find(function(item){
+        return Number(item.pertemuan) === nomor;
+    });
+
+    try{
+
+        if(!tanggal){
+
+            if(existing){
+                await deleteDoc(doc(db, "overrideTanggal", existing.id));
+            }
+
+        }
+        else{
+
+            const data = { sekolah:sekolah, pertemuan:nomor, tanggal:tanggal };
+
+            if(existing){
+                await updateDoc(doc(db, "overrideTanggal", existing.id), data);
+            }
+            else{
+                await addDoc(collection(db, "overrideTanggal"), data);
+            }
+
+        }
+
+        // Buat ulang tanggal normal sebelum menerapkan override terbaru.
+        daftarPertemuan = hitungNomorPertemuan();
+        await loadOverrideTanggal();
+        renderPertemuan();
+        modalUbahTanggal.hide();
+
+    }
+    catch(err){
+
+        console.error("Gagal menyimpan override tanggal:", err);
+        alert("Override tanggal gagal disimpan.");
 
     }
 
@@ -723,3 +856,5 @@ window.simpanStatusPertemuan =
 window.bukaPertemuan = bukaPertemuan;
 window.bukaAbsensi = bukaAbsensi;
 window.simpanStatusPertemuan = simpanStatusPertemuan;
+window.bukaUbahTanggal = bukaUbahTanggal;
+window.simpanOverrideTanggal = simpanOverrideTanggal;
