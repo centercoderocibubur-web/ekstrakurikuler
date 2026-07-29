@@ -19,7 +19,7 @@ function pilihSekolah(namaSekolah){
     localStorage.setItem("sekolahAktif", namaSekolah);
 
     // Buka halaman data siswa
-    window.location.href = "siswa.html";
+    window.location.href = "../siswa/";
 
 }
 
