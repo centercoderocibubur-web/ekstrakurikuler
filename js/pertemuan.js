@@ -20,7 +20,7 @@ import {
 const sekolah = localStorage.getItem("sekolahAbsensi");
 
 if (!sekolah) {
-    window.location.href = "absensi.html";
+    window.location.href = "../absensi/";
 }
 
 document.getElementById("judulSekolah").textContent = sekolah;
@@ -504,7 +504,7 @@ function bukaAbsensi(tanggal, nomor){
         nomor
     );
 
-    window.location.href="absensi-siswa.html";
+    window.location.href="../absensi-siswa/";
 
 }
 
@@ -649,7 +649,7 @@ catch(err){
 
         );
 
-        window.location.href="absensi-siswa.html";
+        window.location.href="../absensi-siswa/";
 
         return;
 
