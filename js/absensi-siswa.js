@@ -49,6 +49,7 @@ async function loadSiswa(){
     console.log("Total dokumen siswa:", snapshot.size);
 
     snapshot.forEach(doc => {
+        console.log("Isi siswaSekolah =", siswaSekolah);
 
         const data = doc.data();
 
@@ -153,8 +154,6 @@ async function loadAbsensi(){
 // ==========================================
 // LOAD DATA PERTAMA
 // ==========================================
-
-loadAbsensi();
 
 // ==========================================
 // RENDER DAFTAR SISWA
@@ -423,32 +422,13 @@ inputCari.addEventListener("keyup", function(){
 
 });
 
+    init();
+
+}
 // ==========================================
 // REFRESH DATA
 // ==========================================
 
-function refreshData(){
-
-    async function init(){
-
-        await loadSiswa();
-
-        dataTampil = [...siswaSekolah];
-
-        document.getElementById("jumlahSiswa").textContent =
-            siswaSekolah.length;
-
-        await loadAbsensi();
-
-        renderSiswa(dataTampil);
-
-        updateRingkasan();
-
-    }
-
-    init();
-
-}
 // ==========================================
 // SIMPAN ABSENSI
 // ==========================================
