@@ -67,6 +67,8 @@ JSON.parse(
     localStorage.getItem("statusPertemuan")
 ) || [];
 
+let daftarGuru = [];
+
 // -------------------------------
 // Format Tanggal Indonesia
 // -------------------------------
@@ -302,6 +304,11 @@ function renderPertemuan(){
 
     }
 
+    const dataStatus = statusPertemuan.find(function(data){
+        return data.sekolah === sekolah &&
+               data.tanggal === item.tanggal.toISOString().split("T")[0];
+    });
+
     let judul = "";
 
     if(item.dihitung){
@@ -354,6 +361,11 @@ onclick="bukaPertemuan('${item.tanggal.toISOString().split("T")[0]}',${nomor})">
     ${status}
 
 </span>
+
+        <p class="small text-muted mt-3 mb-0">
+            <i class="bi bi-person-workspace"></i>
+            Guru: <strong>${dataStatus && dataStatus.guruNama ? dataStatus.guruNama : "Belum dipilih"}</strong>
+        </p>
 
 <div class="row mt-3 text-center small">
 
@@ -470,7 +482,37 @@ document.addEventListener("DOMContentLoaded",function(){
 
     );
 
+    loadGuru();
+
 });
+
+async function loadGuru(){
+
+    const pilihan = document.getElementById("pilihGuru");
+
+    try{
+
+        const snapshot = await getDocs(collection(db, "guru"));
+
+        daftarGuru = snapshot.docs.map(function(item){
+            return { id:item.id, ...item.data() };
+        }).sort(function(a, b){
+            return (a.nama || "").localeCompare(b.nama || "");
+        });
+
+        pilihan.innerHTML = '<option value="">-- Pilih guru --</option>' +
+            daftarGuru.map(function(guru){
+                return `<option value="${guru.id}">${guru.nama}</option>`;
+            }).join("");
+
+    }
+    catch(err){
+
+        console.error("Gagal memuat data guru:", err);
+
+    }
+
+}
 
 // -------------------------------
 // Buka Pertemuan
@@ -487,6 +529,14 @@ function bukaPertemuan(tanggal,nomor){
         tanggal
 
     );
+
+    const data = statusPertemuan.find(function(item){
+        return item.sekolah === sekolah && item.tanggal === tanggal;
+    });
+
+    document.getElementById("pilihGuru").value = data && data.guruId
+        ? data.guruId
+        : "";
 
     modalStatus.show();
 
@@ -527,6 +577,9 @@ async function simpanStatusPertemuan(){
         "input[name='statusPertemuan']:checked"
     ).value;
 
+    const guruId = document.getElementById("pilihGuru").value;
+    const guru = daftarGuru.find(function(item){ return item.id === guruId; });
+
     let data =
     JSON.parse(
         localStorage.getItem("statusPertemuan")
@@ -548,7 +601,11 @@ async function simpanStatusPertemuan(){
 
         pertemuan:nomor,
 
-        status:status
+        status:status,
+
+        guruId:guru ? guru.id : "",
+
+        guruNama:guru ? guru.nama : ""
 
     };
     if(status==="akan datang"){
