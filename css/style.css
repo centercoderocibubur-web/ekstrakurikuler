@@ -1171,6 +1171,36 @@ body{
 
 }
 
+/* Sidebar yang konsisten pada desktop dan ponsel. */
+.sidebar-overlay{
+    display:none;
+}
+
+@media(max-width:992px){
+    .sidebar{
+        left:0;
+        width:min(270px, 85vw);
+        transform:translateX(-100%);
+        transition:transform .35s ease;
+    }
+
+    .sidebar:not(.hide){
+        transform:translateX(0);
+    }
+
+    .sidebar-overlay.active{
+        display:block;
+        position:fixed;
+        inset:0;
+        z-index:998;
+        background:rgba(15,23,42,.45);
+    }
+
+    .content{
+        padding:20px 15px;
+    }
+}
+
 /* ===========================
    Progress Sekolah
 =========================== */
