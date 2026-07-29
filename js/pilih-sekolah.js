@@ -1,13 +1,62 @@
-import { checkLogin } from "./auth.js";
+import { db } from "./firebase.js";
 
-checkLogin();
+import {
+    collection,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
-function pilihSekolah(namaSekolah){
+document.addEventListener("DOMContentLoaded", loadSekolah);
 
-    localStorage.setItem("sekolahAktif", namaSekolah);
+async function loadSekolah(){
 
-    window.location.href = "siswa.html";
+    try{
+
+        const snapshot = await getDocs(
+            collection(db,"siswa")
+        );
+
+        const jumlah = {
+
+            "SD AL JANNAH":0,
+            "SMP AL JANNAH":0,
+            "SD SEKOLAH ALAM CIKEAS":0,
+            "SMP SEKOLAH ALAM CIKEAS":0,
+            "SMA SEKOLAH ALAM CIKEAS":0
+
+        };
+
+        snapshot.forEach(doc=>{
+
+            const data = doc.data();
+
+            if(jumlah[data.sekolah] !== undefined){
+
+                jumlah[data.sekolah]++;
+
+            }
+
+        });
+
+        document.getElementById("sdj").textContent =
+            jumlah["SD AL JANNAH"];
+
+        document.getElementById("smpj").textContent =
+            jumlah["SMP AL JANNAH"];
+
+        document.getElementById("sdsac").textContent =
+            jumlah["SD SEKOLAH ALAM CIKEAS"];
+
+        document.getElementById("smpsac").textContent =
+            jumlah["SMP SEKOLAH ALAM CIKEAS"];
+
+        document.getElementById("smasac").textContent =
+            jumlah["SMA SEKOLAH ALAM CIKEAS"];
+
+    }
+    catch(err){
+
+        console.error(err);
+
+    }
 
 }
-
-window.pilihSekolah = pilihSekolah;
