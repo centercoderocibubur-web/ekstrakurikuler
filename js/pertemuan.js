@@ -32,8 +32,8 @@ document.getElementById("judulSekolah").textContent = sekolah;
 const jadwalSekolah = {
 
     "SD AL JANNAH": {
-        hari: "Selasa",
-        mulai: "2026-07-07"
+        hari: "Kamis",
+        mulai: "2026-07-30"
     },
 
     "SMP AL JANNAH": {
