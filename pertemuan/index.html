@@ -313,6 +313,29 @@
 
 </div>
 
+<!-- Modal Override Tanggal Pertemuan -->
+<div class="modal fade" id="modalUbahTanggal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ubah Tanggal Pertemuan</h5>
+                <button class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="nomorOverrideTanggal">
+                <p class="small text-muted">Tanggal saat ini: <strong id="tanggalNormal"></strong></p>
+                <label class="form-label" for="tanggalOverride">Tanggal Pertemuan</label>
+                <input type="date" id="tanggalOverride" class="form-control">
+                <small class="text-muted d-block mt-2">Kosongkan tanggal lalu simpan untuk kembali ke jadwal otomatis.</small>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button class="btn btn-primary" onclick="simpanOverrideTanggal()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
 <script type="module" src="../js/auth.js"></script>
 <script type="module" src="../js/sidebar.js"></script>
