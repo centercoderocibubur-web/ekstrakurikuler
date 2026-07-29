@@ -5,6 +5,10 @@ import {
     getFirestore
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
+import {
+    getAuth
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+
 // Konfigurasi Firebase
 const firebaseConfig = {
 
@@ -26,3 +30,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 export const db = getFirestore(app);
+export const auth = getAuth(app);
