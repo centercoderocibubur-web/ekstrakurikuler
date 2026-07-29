@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", loadSekolah);
 
 async function loadSekolah(){
 
+    const status = document.getElementById("statusDataSekolah");
+
     try{
 
         const snapshot = await getDocs(
@@ -52,10 +54,20 @@ async function loadSekolah(){
         document.getElementById("smasac").textContent =
             jumlah["SMA SEKOLAH ALAM CIKEAS"];
 
+        if(status){
+            status.textContent = "Jumlah siswa berhasil dimuat.";
+            status.className = "small text-success";
+        }
+
     }
     catch(err){
 
-        console.error(err);
+        console.error("Gagal memuat data siswa:", err);
+
+        if(status){
+            status.textContent = "Data siswa tidak dapat dimuat. Periksa koneksi internet atau izin Firestore.";
+            status.className = "small text-danger";
+        }
 
     }
 
