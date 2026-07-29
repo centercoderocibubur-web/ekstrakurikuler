@@ -1,7 +1,10 @@
 import { db } from "./firebase.js";
 import {
     collection,
-    addDoc
+    addDoc,
+    getDocs,
+    query,
+    where
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 // =======================================
@@ -196,40 +199,15 @@ document.getElementById("listPertemuan");
 
 const sekarang = new Date();
 
+// Rekap absensi dimuat dari Firestore agar tetap tersedia setelah halaman
+// ditutup atau dibuka dari perangkat lain.
+let dataAbsensi = [];
+
 // -------------------------------
 // Tampilkan Kartu Pertemuan
 // -------------------------------
 function getInfoAbsensi(tanggal){
-
-    // Cek status pertemuan
-    const status = statusPertemuan.find(function(item){
-
-        return item.sekolah === sekolah &&
-               item.tanggal === tanggal;
-
-    });
-
-    // Jika bukan terlaksana, jangan tampilkan data absensi
-    if(!status || status.status !== "terlaksana"){
-
-        return{
-
-            total:0,
-
-            hadir:0,
-
-            tidakHadir:0
-
-        };
-
-    }
-
-    // Ambil data absensi
-    const data = JSON.parse(
-        localStorage.getItem("absensi")
-    ) || [];
-
-    const absensi = data.find(function(item){
+    const absensi = dataAbsensi.find(function(item){
 
         return item.sekolah===sekolah &&
                item.tanggal===tanggal;
@@ -269,7 +247,12 @@ function getInfoAbsensi(tanggal){
     };
 
 }
-daftarPertemuan.forEach(function(item){
+
+function renderPertemuan(){
+
+    container.innerHTML = "";
+
+    daftarPertemuan.forEach(function(item){
     const info = getInfoAbsensi(
 
     item.tanggal.toISOString().split("T")[0]
@@ -444,7 +427,34 @@ onclick="bukaPertemuan('${item.tanggal.toISOString().split("T")[0]}',${nomor})">
 
     `;
 
-});
+    });
+
+}
+
+async function loadRekapAbsensi(){
+
+    try{
+
+        const snapshot = await getDocs(
+            query(collection(db, "absensi"), where("sekolah", "==", sekolah))
+        );
+
+        dataAbsensi = snapshot.docs.map(function(item){
+            return item.data();
+        });
+
+    }
+    catch(err){
+
+        console.error("Gagal memuat rekap absensi:", err);
+
+    }
+
+    renderPertemuan();
+
+}
+
+loadRekapAbsensi();
 
 // -------------------------------
 // Modal
