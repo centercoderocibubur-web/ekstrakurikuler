@@ -278,7 +278,7 @@ function updateRingkasan(){
 
     siswaSekolah.forEach(function(item){
 
-        const status = statusMap[item.nama];
+        const status = statusMap[item.nama] || "Hadir";
 
         switch(status){
 
@@ -320,14 +320,6 @@ function updateRingkasan(){
     document.getElementById("persenHadir").textContent = persen + "%";
 
 }
-
-// ==========================================
-// TAMPILKAN DATA PERTAMA
-// ==========================================
-
-renderSiswa(dataTampil);
-
-updateRingkasan();
 
 // ==========================================
 // UBAH STATUS SISWA
@@ -523,3 +515,47 @@ window.resetAbsensi = resetAbsensi;
 window.simpanAbsensi = simpanAbsensi;
 window.kembali = kembali;
 window.ubahStatus = ubahStatus;
+
+// ==========================================
+// INISIALISASI HALAMAN
+// ==========================================
+
+async function initAbsensi(){
+
+    try{
+
+        await loadSiswa();
+
+        // Riwayat bersifat pelengkap. Kegagalan membacanya tidak boleh
+        // menghalangi daftar siswa untuk absensi baru.
+        try{
+            await loadAbsensi();
+        }
+        catch(err){
+            console.warn("Riwayat absensi tidak dapat dimuat:", err);
+        }
+
+        dataTampil = [...siswaSekolah];
+
+        document.getElementById("jumlahSiswa").textContent =
+            siswaSekolah.length;
+
+        renderSiswa(dataTampil);
+        updateRingkasan();
+
+    }
+    catch(err){
+
+        console.error("Gagal memuat data siswa:", err);
+
+        listSiswa.innerHTML = `
+            <div class="alert alert-danger">
+                Data siswa tidak dapat dimuat. Periksa koneksi internet atau izin Firestore.
+            </div>
+        `;
+
+    }
+
+}
+
+initAbsensi();
