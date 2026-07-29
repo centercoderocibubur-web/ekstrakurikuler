@@ -1,168 +1,108 @@
 /*=========================================
   AUTH.JS
-  Sistem Informasi Ekstrakurikuler
-  Codero Cibubur
-=========================================*/
+  Firebase Authentication (Email & Password)
+==========================================*/
 
-// =============================
-// DATA LOGIN
-// =============================
-
-const ADMIN = {
-    username: "admin",
-    password: "codero123"
-};
-
-// =============================
-// CEK ELEMEN
-// =============================
+import { auth } from "./firebase.js";
+import {
+    browserLocalPersistence,
+    browserSessionPersistence,
+    onAuthStateChanged,
+    setPersistence,
+    signInWithEmailAndPassword,
+    signOut
+} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 
 const loginForm = document.getElementById("loginForm");
-const usernameInput = document.getElementById("username");
+const emailInput = document.getElementById("email");
 const passwordInput = document.getElementById("password");
 const rememberMe = document.getElementById("rememberMe");
 const loginError = document.getElementById("loginError");
 const loginBtn = document.getElementById("loginBtn");
 const togglePassword = document.getElementById("togglePassword");
 
-// =============================
-// LOAD REMEMBER ME
-// =============================
-
-window.addEventListener("load", () => {
-
-    const savedUsername = localStorage.getItem("remember_username");
-
-    if (savedUsername) {
-
-        usernameInput.value = savedUsername;
-        rememberMe.checked = true;
-
+function tampilkanError(pesan){
+    if(loginError){
+        loginError.textContent = pesan;
+        loginError.classList.remove("d-none");
     }
-
-});
-
-// =============================
-// SHOW / HIDE PASSWORD
-// =============================
-
-if (togglePassword) {
-
-    togglePassword.addEventListener("click", () => {
-
-        if (passwordInput.type === "password") {
-
-            passwordInput.type = "text";
-
-            togglePassword.innerHTML =
-                '<i class="bi bi-eye-slash"></i>';
-
-        } else {
-
-            passwordInput.type = "password";
-
-            togglePassword.innerHTML =
-                '<i class="bi bi-eye"></i>';
-
-        }
-
-    });
-
 }
 
-// =============================
-// LOGIN
-// =============================
+if(togglePassword && passwordInput){
+    togglePassword.addEventListener("click", function(){
+        const tersembunyi = passwordInput.type === "password";
+        passwordInput.type = tersembunyi ? "text" : "password";
+        togglePassword.innerHTML = tersembunyi
+            ? '<i class="bi bi-eye-slash"></i>'
+            : '<i class="bi bi-eye"></i>';
+    });
+}
 
-if (loginForm) {
+if(loginForm){
+    onAuthStateChanged(auth, function(user){
+        if(user){
+            window.location.href = "dashboard/";
+        }
+    });
 
-    loginForm.addEventListener("submit", function (e) {
-
-        e.preventDefault();
+    loginForm.addEventListener("submit", async function(event){
+        event.preventDefault();
 
         loginError.classList.add("d-none");
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
 
-        const username = usernameInput.value.trim();
-        const password = passwordInput.value.trim();
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Login...';
 
-        if (
-            username === ADMIN.username &&
-            password === ADMIN.password
-        ) {
+        try{
+            await setPersistence(
+                auth,
+                rememberMe.checked ? browserLocalPersistence : browserSessionPersistence
+            );
 
-            // Simpan status login
-            sessionStorage.setItem("isLogin", "true");
-
-            // Remember Me
-            if (rememberMe.checked) {
-
-                localStorage.setItem(
-                    "remember_username",
-                    username
-                );
-
-            } else {
-
-                localStorage.removeItem(
-                    "remember_username"
-                );
-
-            }
-
-            // Animasi tombol
-            loginBtn.disabled = true;
-
-            loginBtn.innerHTML =
-                '<span class="spinner-border spinner-border-sm me-2"></span>Login...';
-
-            setTimeout(() => {
-
-                window.location.href = "dashboard/";
-
-            }, 800);
-
-        } else {
-
-            loginError.classList.remove("d-none");
-
+            await signInWithEmailAndPassword(auth, email, password);
+            window.location.href = "dashboard/";
+        }
+        catch(error){
+            console.error("Login Firebase gagal:", error);
             passwordInput.value = "";
-
             passwordInput.focus();
 
+            const pesan = error.code === "auth/invalid-credential" ||
+                error.code === "auth/user-not-found" ||
+                error.code === "auth/wrong-password"
+                ? "Email atau password tidak valid."
+                : "Login gagal. Periksa koneksi atau konfigurasi Firebase Authentication.";
+
+            tampilkanError(pesan);
         }
-
+        finally{
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = '<i class="bi bi-box-arrow-in-right"></i> LOGIN';
+        }
     });
-
 }
 
-// =============================
-// PROTEKSI HALAMAN
-// =============================
-
-function checkLogin() {
-
-    if (sessionStorage.getItem("isLogin") !== "true") {
-
-        window.location.href = "../";
-
-    }
-
+function checkLogin(){
+    return onAuthStateChanged(auth, function(user){
+        if(!user){
+            window.location.href = "../";
+        }
+    });
 }
 
-// =============================
-// LOGOUT
-// =============================
+async function logout(){
+    if(!confirm("Yakin ingin logout?")) return;
 
-function logout() {
-
-    if (confirm("Yakin ingin logout?")) {
-
-        sessionStorage.removeItem("isLogin");
-
+    try{
+        await signOut(auth);
         window.location.href = "../";
-
     }
-
+    catch(error){
+        console.error("Logout Firebase gagal:", error);
+        alert("Logout gagal. Silakan coba lagi.");
+    }
 }
 
 window.checkLogin = checkLogin;
