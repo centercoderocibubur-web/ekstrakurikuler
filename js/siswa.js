@@ -85,7 +85,7 @@ async function init(){
 
         alert("Silakan pilih sekolah terlebih dahulu.");
 
-        window.location.href="pilih-sekolah.html";
+        window.location.href="../pilih-sekolah/";
 
         return;
 
