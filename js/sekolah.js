@@ -3,11 +3,11 @@
    CODERO CIBUBUR
 ========================================== */
 
-// Pastikan user sudah login
-checkLogin();
+import { checkLogin } from "./auth.js";
 
-// Ambil data siswa dari Local Storage
-let dataSiswa = JSON.parse(localStorage.getItem("siswa")) || [];
+// Pastikan user sudah login. Data siswa sekarang disimpan di Firestore,
+// sehingga jumlahnya dimuat oleh pilih-sekolah.js.
+checkLogin();
 
 /* ==========================================
    PILIH SEKOLAH
@@ -23,60 +23,6 @@ function pilihSekolah(namaSekolah){
 
 }
 
-/* ==========================================
-   HITUNG JUMLAH SISWA
-========================================== */
+// Fungsi ini dipanggil dari atribut onclick pada kartu sekolah.
+window.pilihSekolah = pilihSekolah;
 
-function jumlahSiswa(namaSekolah){
-
-    return dataSiswa.filter(function(item){
-
-        return item.sekolah === namaSekolah;
-
-    }).length;
-
-}
-
-/* ==========================================
-   TAMPILKAN JUMLAH SISWA
-========================================== */
-
-function tampilkanJumlah(){
-
-    const daftar = {
-
-        sdj: "SD AL JANNAH",
-
-        smpj: "SMP AL JANNAH",
-
-        sdsac: "SD SEKOLAH ALAM CIKEAS",
-
-        smpsac: "SMP SEKOLAH ALAM CIKEAS",
-
-        smasac: "SMA SEKOLAH ALAM CIKEAS"
-
-    };
-
-    for(const id in daftar){
-
-        const elemen = document.getElementById(id);
-
-        if(elemen){
-
-            elemen.textContent = jumlahSiswa(daftar[id]);
-
-        }
-
-    }
-
-}
-
-/* ==========================================
-   JALANKAN
-========================================== */
-
-document.addEventListener("DOMContentLoaded", function(){
-
-    tampilkanJumlah();
-
-});
