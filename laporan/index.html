@@ -1,24 +1,182 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Laporan Absensi per Sekolah</title>
-    <!-- Pastikan path CSS sesuai dengan struktur Anda -->
-    <link rel="stylesheet" href="../css/layout.css">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
-    <div class="container">
-        <h2>Pilih Sekolah untuk Melihat Laporan</h2>
-        
-        <!-- Container untuk card yang akan di-generate melalui JavaScript -->
-        <div id="card-container" class="card-grid">
-            <!-- Card akan dirender di sini -->
-        </div>
-    </div>
 
-    <!-- Jangan lupa panggil firebase dan script laporan Anda -->
-    <script src="../js/firebase.js"></script>
-    <script src="../js/laporan.js"></script>
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Laporan | CODERO Cibubur</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css"
+          rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- ===========================
+         SIDEBAR
+    ============================ -->
+
+    <aside class="sidebar hide" id="sidebar">
+
+        <div class="brand">
+
+            <img src="../coderocibubur.jpg">
+
+            <h4>CODERO</h4>
+
+            <span>Cibubur</span>
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+
+                <a href="../dashboard/">
+
+                    <i class="bi bi-grid-fill"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../pilih-sekolah/">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    Data Siswa
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../absensi/">
+
+                    <i class="bi bi-calendar-check-fill"></i>
+
+                    Absensi
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="../laporan/">
+
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>
+
+                    Laporan
+
+                </a>
+
+            </li>
+
+        </ul>
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </button>
+
+    </aside>
+
+    <!-- ===========================
+         MAIN
+    ============================ -->
+
+    <main class="main full">
+
+        <header class="topbar">
+
+            <div class="left-header">
+
+                <button
+                    class="menu-btn"
+                    id="menuToggle">
+
+                    <i class="bi bi-list"></i>
+
+                </button>
+
+                <div>
+
+                    <h3>Laporan Absensi</h3>
+
+                    <small>
+
+                        Pilih sekolah untuk melihat laporan satu semester
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- ===========================
+             CONTENT
+        ============================ -->
+
+        <section class="content">
+
+            <div class="welcome-box">
+
+                <h2>📊 Laporan Absensi</h2>
+
+                <p>
+
+                    Pilih sekolah yang ingin ditampilkan
+                    laporan absensinya.
+
+                </p>
+
+            </div>
+
+            <div class="row g-4" id="listSekolah">
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module" src="../js/auth.js"></script>
+
+<script type="module" src="../js/sidebar.js"></script>
+
+<script type="module" src="../js/laporan.js"></script>
+
 </body>
+
 </html>
