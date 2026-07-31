@@ -10,8 +10,9 @@ import {
 
 checkLogin();
 
-const sekolah =
-    localStorage.getItem("laporanSekolah");
+const params = new URLSearchParams(window.location.search);
+
+const sekolah = params.get("sekolah");
 
 if(!sekolah){
 
