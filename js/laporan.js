@@ -155,15 +155,11 @@ function tampilkanSekolah(dataSiswa){
 
 function bukaLaporan(sekolah){
 
-    localStorage.setItem(
+    const url = new URL("../laporan-detail/", window.location.href);
 
-        "laporanSekolah",
+    url.searchParams.set("sekolah", sekolah);
 
-        sekolah
-
-    );
-
-    window.location.href = "../laporan-detail/";
+    window.location.href = url.toString();
 
 }
 
