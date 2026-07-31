@@ -1308,3 +1308,24 @@ body{
     color:#1E293B;
 
 }
+
+.card-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card-sekolah {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    width: 250px;
+    cursor: pointer; /* Mengubah kursor jadi pointer/tangan agar terlihat bisa diklik */
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #fff;
+}
+
+.card-sekolah:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
