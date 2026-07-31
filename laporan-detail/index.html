@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Detail Laporan | CODERO Cibubur</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/style.css">
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+
+    <aside class="sidebar hide" id="sidebar">
+
+        <div class="brand">
+
+            <img src="../coderocibubur.jpg">
+
+            <h4>CODERO</h4>
+
+            <span>Cibubur</span>
+
+        </div>
+
+        <ul class="sidebar-menu">
+
+            <li>
+
+                <a href="../dashboard/">
+
+                    <i class="bi bi-grid-fill"></i>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../pilih-sekolah/">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    Data Siswa
+
+                </a>
+
+            </li>
+
+            <li>
+
+                <a href="../absensi/">
+
+                    <i class="bi bi-calendar-check-fill"></i>
+
+                    Absensi
+
+                </a>
+
+            </li>
+
+            <li class="active">
+
+                <a href="../laporan/">
+
+                    <i class="bi bi-file-earmark-bar-graph-fill"></i>
+
+                    Laporan
+
+                </a>
+
+            </li>
+
+        </ul>
+
+        <button
+            class="logout-btn"
+            onclick="logout()">
+
+            <i class="bi bi-box-arrow-right"></i>
+
+            Logout
+
+        </button>
+
+    </aside>
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="main full">
+
+        <!-- HEADER -->
+
+        <header class="topbar">
+
+            <div class="left-header">
+
+                <button
+                    class="menu-btn"
+                    id="menuToggle">
+
+                    <i class="bi bi-list"></i>
+
+                </button>
+
+                <div>
+
+                    <h3 id="judulSekolah">
+
+                        Laporan Absensi
+
+                    </h3>
+
+                    <small>
+
+                        Semester Juli - Desember 2026
+
+                    </small>
+
+                </div>
+
+            </div>
+
+        </header>
+
+        <!-- CONTENT -->
+
+        <section class="content">
+
+            <!-- INFORMASI -->
+
+            <div class="welcome-box">
+
+                <h2 id="namaSekolah">
+
+                    Memuat...
+
+                </h2>
+
+                <p>
+
+                    Rekap absensi seluruh siswa selama satu semester.
+
+                </p>
+
+            </div>
+
+            <!-- RINGKASAN -->
+
+            <div class="row g-3 mb-4">
+
+                <div class="col-lg-3">
+
+                    <div class="card-panel text-center">
+
+                        <h3 id="totalSiswa">
+
+                            0
+
+                        </h3>
+
+                        <small>Total Siswa</small>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="card-panel text-center">
+
+                        <h3 id="totalPertemuan">
+
+                            0
+
+                        </h3>
+
+                        <small>Pertemuan</small>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="card-panel text-center">
+
+                        <h3 id="persentaseHadir">
+
+                            0%
+
+                        </h3>
+
+                        <small>Rata-rata Kehadiran</small>
+
+                    </div>
+
+                </div>
+
+                <div class="col-lg-3">
+
+                    <div class="card-panel text-center">
+
+                        <button
+                            class="btn btn-success w-100"
+                            id="btnExportExcel">
+
+                            <i class="bi bi-file-earmark-excel"></i>
+
+                            Export Excel
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- TABEL -->
+
+            <div class="card-panel">
+
+                <div class="table-responsive">
+
+                    <table
+                        class="table table-bordered table-hover align-middle text-center"
+                        id="tabelLaporan">
+
+                        <thead id="headerLaporan">
+
+                            <!-- Dibuat otomatis -->
+
+                        </thead>
+
+                        <tbody id="bodyLaporan">
+
+                            <tr>
+
+                                <td colspan="100">
+
+                                    Memuat data...
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"></script>
+
+<script type="module" src="../js/auth.js"></script>
+
+<script type="module" src="../js/sidebar.js"></script>
+
+<script type="module" src="../js/laporan-detail.js"></script>
+
+</body>
+
+</html>
